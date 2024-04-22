@@ -28,6 +28,9 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".activity.SubSettingOtherMainActivity"
+            android:exported="false" />
+        <activity
             android:name=".activity.TestNFCMainActivity"
             android:exported="false" />
         <activity

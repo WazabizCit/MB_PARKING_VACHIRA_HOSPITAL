@@ -49,7 +49,7 @@ public class SubSettingIpaddressMainActivity extends ImportantMethod implements 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
-        toolbar.setTitle("IP Address");
+        toolbar.setTitle("ตั้งค่า IP Server");
 
         if (getSupportActionBar() != null) {
 

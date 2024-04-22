@@ -56,7 +56,7 @@ public class SubSettingNFCMainActivity extends ImportantMethod implements View.O
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
-        toolbar.setTitle("ตั้งค่า NFC");
+        toolbar.setTitle("ตั้งค่าการอ่าน NFC");
 
         if (getSupportActionBar() != null) {
 

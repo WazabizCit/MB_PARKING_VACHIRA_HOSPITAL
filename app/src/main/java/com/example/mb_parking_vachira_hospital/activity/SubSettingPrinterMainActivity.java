@@ -73,7 +73,7 @@ public class SubSettingPrinterMainActivity extends ImportantMethod implements Vi
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
-        toolbar.setTitle("ตั้งค่าเครื่อง  Print");
+        toolbar.setTitle("ตั้งค่า Print");
 
         if (getSupportActionBar() != null) {
 

@@ -19,8 +19,10 @@ public class SettingMainActivity extends ImportantMethod implements View.OnClick
     CardView btn_setting_ip_address;
     CardView btn_setting_device;
     CardView btn_setting_ip_print;
-    CardView btn_setting_test_nfc;
     CardView btn_setting_nfc;
+    CardView btn_setting_other;
+
+
 
 
 
@@ -56,15 +58,17 @@ public class SettingMainActivity extends ImportantMethod implements View.OnClick
         btn_setting_ip_address = findViewById(R.id.btn_setting_ip_address);
         btn_setting_device = findViewById(R.id.btn_setting_device);
         btn_setting_ip_print = findViewById(R.id.btn_setting_ip_print);
-        btn_setting_test_nfc = findViewById(R.id.btn_setting_test_nfc);
         btn_setting_nfc = findViewById(R.id.btn_setting_nfc);
+        btn_setting_other = findViewById(R.id.btn_setting_other);
+
 
 
         btn_setting_ip_address.setOnClickListener(this);
         btn_setting_device.setOnClickListener(this);
         btn_setting_ip_print.setOnClickListener(this);
-        btn_setting_test_nfc.setOnClickListener(this);
         btn_setting_nfc.setOnClickListener(this);
+        btn_setting_other.setOnClickListener(this);
+
 
 
 
@@ -135,14 +139,15 @@ public class SettingMainActivity extends ImportantMethod implements View.OnClick
             finish();
 
 
-        }else if(view == btn_setting_test_nfc){
+        }else if(view == btn_setting_other){
 
-            Intent intent = new Intent(SettingMainActivity.this, TestNFCMainActivity.class);
+            Intent intent = new Intent(SettingMainActivity.this, SubSettingOtherMainActivity.class);
             startActivity(intent);
             finish();
 
 
         }
+
 
 
     }
