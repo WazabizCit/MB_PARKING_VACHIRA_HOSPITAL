@@ -1,20 +1,25 @@
 package com.example.mb_parking_vachira_hospital.util;
 
 
+
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.example.mb_parking_vachira_hospital.R;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
 
 
 public class ImportantMethod   extends AppCompatActivity {
@@ -24,37 +29,23 @@ public class ImportantMethod   extends AppCompatActivity {
     }
 
 
-    public void showToastWarning(String text, Context context) {
-
-        int bg_color = Color.parseColor("#ffc000");
-
-        Toast tost  = Toast.makeText(context,text,Toast.LENGTH_LONG);
-        View view  = tost.getView();
-        view.getBackground().setColorFilter(bg_color, PorterDuff.Mode.SRC_IN);
-        TextView textx = view.findViewById(android.R.id.message);
-        textx.setTextSize(20);
-        textx.setTextColor(Color.BLACK);
-        tost.show();
+    public void showToastWarning(String msg, Context context) {
 
 
-
-    }
-
-
-
-    public void showToastSuccess(String text, Context context) {
+        LayoutInflater inflater = getLayoutInflater();
+        View layout = inflater.inflate(R.layout.custom_toast,(ViewGroup) findViewById(R.id.custom_toast_container));
 
 
-        int bg_color = Color.parseColor("#28a953");
+        TextView text = (TextView) layout.findViewById(R.id.text);
+        layout.setBackgroundColor(Color.parseColor("#ffc000"));
+        text.setText(msg);
+        text.setTextSize(18);
 
-        Toast tost  = Toast.makeText(context,text,Toast.LENGTH_LONG);
-        View view  = tost.getView();
-        view.getBackground().setColorFilter(bg_color, PorterDuff.Mode.SRC_IN);
-        TextView textx = view.findViewById(android.R.id.message);
-        textx.setTextSize(20);
-        textx.setTextColor(Color.WHITE);
-        tost.show();
-
+        Toast toast = new Toast(getApplicationContext());
+        toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
+        toast.setDuration(Toast.LENGTH_SHORT);
+        toast.setView(layout);
+        toast.show();
 
 
 
@@ -62,19 +53,47 @@ public class ImportantMethod   extends AppCompatActivity {
 
 
 
-    public void showToastDanger(String text, Context context) {
+    public void showToastSuccess(String msg, Context context) {
 
 
-        int bg_color = Color.parseColor("#e60000");
 
-        Toast tost  = Toast.makeText(context,text,Toast.LENGTH_LONG);
-        View view  = tost.getView();
-        view.getBackground().setColorFilter(bg_color, PorterDuff.Mode.SRC_IN);
-        TextView textx = view.findViewById(android.R.id.message);
-        textx.setTextSize(20);
-        textx.setTextColor(Color.WHITE);
-        tost.show();
+        LayoutInflater inflater = getLayoutInflater();
+        View layout = inflater.inflate(R.layout.custom_toast,(ViewGroup) findViewById(R.id.custom_toast_container));
 
+
+        TextView text = (TextView) layout.findViewById(R.id.text);
+        layout.setBackgroundColor(Color.parseColor("#28a953"));
+        text.setText(msg);
+
+        Toast toast = new Toast(getApplicationContext());
+        toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
+        toast.setDuration(Toast.LENGTH_SHORT);
+        toast.setView(layout);
+        toast.show();
+
+
+
+
+
+    }
+
+
+
+    public void showToastDanger(String msg, Context context) {
+
+        LayoutInflater inflater = getLayoutInflater();
+        View layout = inflater.inflate(R.layout.custom_toast,(ViewGroup) findViewById(R.id.custom_toast_container));
+
+
+        TextView text = (TextView) layout.findViewById(R.id.text);
+        layout.setBackgroundColor(Color.parseColor("#e60000"));
+        text.setText(msg);
+
+        Toast toast = new Toast(getApplicationContext());
+        toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
+        toast.setDuration(Toast.LENGTH_SHORT);
+        toast.setView(layout);
+        toast.show();
 
 
 

@@ -3,10 +3,18 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/MzWazabi/AndroidStudioProjects/MB_PARKING_VACHIRA_HOSPITAL/app/src/main/res/drawable/selector_overlay.xml" value="0.153" />
         <entry key="..\:/Users/MzWazabi/AndroidStudioProjects/MB_PARKING_VACHIRA_HOSPITAL/app/src/main/res/layout/activity_login_main.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/MzWazabi/AndroidStudioProjects/MB_PARKING_VACHIRA_HOSPITAL/app/src/main/res/layout/activity_main.xml" value="0.18802083333333333" />
         <entry key="..\:/Users/MzWazabi/AndroidStudioProjects/MB_PARKING_VACHIRA_HOSPITAL/app/src/main/res/layout/activity_main2.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/MzWazabi/AndroidStudioProjects/MB_PARKING_VACHIRA_HOSPITAL/app/src/main/res/layout/activity_main_activitys.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/MzWazabi/AndroidStudioProjects/MB_PARKING_VACHIRA_HOSPITAL/app/src/main/res/layout/activity_main_splash.xml" value="0.25" />
+        <entry key="..\:/Users/MzWazabi/AndroidStudioProjects/MB_PARKING_VACHIRA_HOSPITAL/app/src/main/res/layout/activity_setting_main.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/MzWazabi/AndroidStudioProjects/MB_PARKING_VACHIRA_HOSPITAL/app/src/main/res/layout/activity_sub_setting_ipaddress_main.xml" value="0.18840579710144928" />
+        <entry key="..\:/Users/MzWazabi/AndroidStudioProjects/MB_PARKING_VACHIRA_HOSPITAL/app/src/main/res/layout/activity_sub_setting_nfcmain.xml" value="0.24635416666666668" />
+        <entry key="..\:/Users/MzWazabi/AndroidStudioProjects/MB_PARKING_VACHIRA_HOSPITAL/app/src/main/res/layout/activity_sub_setting_printer_main.xml" value="0.18840579710144928" />
+        <entry key="..\:/Users/MzWazabi/AndroidStudioProjects/MB_PARKING_VACHIRA_HOSPITAL/app/src/main/res/layout/custom_toast.xml" value="0.25" />
+        <entry key="..\:/Users/MzWazabi/AndroidStudioProjects/MB_PARKING_VACHIRA_HOSPITAL/app/src/main/res/layout/toast.xml" value="0.24635416666666668" />
         <entry key="..\:/Users/MzWazabi/AndroidStudioProjects/MB_PARKING_VACHIRA_HOSPITAL/app/src/main/res/xml/nfc_tech_filter.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/MzWazabi/AndroidStudioProjects/MB_PARKING_VACHIRA_HOSPITAL/app/src/main/res/xml/provider_paths.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/MzWazabi/AndroidStudioProjects/MB_PARKING_VACHIRA_HOSPITAL/app/src/main/res/xml/xml.xml" value="0.36666666666666664" />

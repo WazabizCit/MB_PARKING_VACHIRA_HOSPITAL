@@ -7,8 +7,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.ActivityCompat;
 
-import android.os.Bundle;
-
 import com.example.mb_parking_vachira_hospital.R;
 import com.example.mb_parking_vachira_hospital.util.ImportantMethod;
 

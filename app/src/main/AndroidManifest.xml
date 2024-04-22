@@ -27,7 +27,24 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-
+        <activity
+            android:name=".activity.TestNFCMainActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.SubSettingNFCMainActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.SubSettingPrinterMainActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.SubSettingDeviceMainActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.SubSettingIpaddressMainActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.SettingMainActivity"
+            android:exported="false" />
         <activity
             android:name=".activity.LoginMainActivity"
             android:exported="false" />
