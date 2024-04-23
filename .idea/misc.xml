@@ -3,7 +3,21 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/MzWazabi/AndroidStudioProjects/MB_PARKING_VACHIRA_HOSPITAL/app/src/main/res/drawable/ic_about_black_24dp.xml" value="0.153" />
+        <entry key="..\:/Users/MzWazabi/AndroidStudioProjects/MB_PARKING_VACHIRA_HOSPITAL/app/src/main/res/drawable/ic_account_box_black_24dp.xml" value="0.153" />
+        <entry key="..\:/Users/MzWazabi/AndroidStudioProjects/MB_PARKING_VACHIRA_HOSPITAL/app/src/main/res/drawable/ic_arrow_back_white_40dp.xml" value="0.153" />
+        <entry key="..\:/Users/MzWazabi/AndroidStudioProjects/MB_PARKING_VACHIRA_HOSPITAL/app/src/main/res/drawable/ic_baseline_account_circle_24.xml" value="0.153" />
+        <entry key="..\:/Users/MzWazabi/AndroidStudioProjects/MB_PARKING_VACHIRA_HOSPITAL/app/src/main/res/drawable/ic_baseline_delete_24.xml" value="0.153" />
+        <entry key="..\:/Users/MzWazabi/AndroidStudioProjects/MB_PARKING_VACHIRA_HOSPITAL/app/src/main/res/drawable/ic_baseline_login_24.xml" value="0.153" />
+        <entry key="..\:/Users/MzWazabi/AndroidStudioProjects/MB_PARKING_VACHIRA_HOSPITAL/app/src/main/res/drawable/ic_camera_alt_black_24dp.xml" value="0.153" />
+        <entry key="..\:/Users/MzWazabi/AndroidStudioProjects/MB_PARKING_VACHIRA_HOSPITAL/app/src/main/res/drawable/ic_delete_forever_black_24dp.xml" value="0.153" />
+        <entry key="..\:/Users/MzWazabi/AndroidStudioProjects/MB_PARKING_VACHIRA_HOSPITAL/app/src/main/res/drawable/ic_find_black_24dp.xml" value="0.153" />
+        <entry key="..\:/Users/MzWazabi/AndroidStudioProjects/MB_PARKING_VACHIRA_HOSPITAL/app/src/main/res/drawable/ic_history_success_black_24dp.xml" value="0.153" />
+        <entry key="..\:/Users/MzWazabi/AndroidStudioProjects/MB_PARKING_VACHIRA_HOSPITAL/app/src/main/res/drawable/ic_launcher_background.xml" value="0.153" />
+        <entry key="..\:/Users/MzWazabi/AndroidStudioProjects/MB_PARKING_VACHIRA_HOSPITAL/app/src/main/res/drawable/ic_layers_clear_black_24dp.xml" value="0.153" />
+        <entry key="..\:/Users/MzWazabi/AndroidStudioProjects/MB_PARKING_VACHIRA_HOSPITAL/app/src/main/res/drawable/ic_lock_black_24dp.xml" value="0.153" />
         <entry key="..\:/Users/MzWazabi/AndroidStudioProjects/MB_PARKING_VACHIRA_HOSPITAL/app/src/main/res/drawable/selector_overlay.xml" value="0.153" />
+        <entry key="..\:/Users/MzWazabi/AndroidStudioProjects/MB_PARKING_VACHIRA_HOSPITAL/app/src/main/res/layout/activity_in_car_main.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/MzWazabi/AndroidStudioProjects/MB_PARKING_VACHIRA_HOSPITAL/app/src/main/res/layout/activity_login_main.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/MzWazabi/AndroidStudioProjects/MB_PARKING_VACHIRA_HOSPITAL/app/src/main/res/layout/activity_main.xml" value="0.18802083333333333" />
         <entry key="..\:/Users/MzWazabi/AndroidStudioProjects/MB_PARKING_VACHIRA_HOSPITAL/app/src/main/res/layout/activity_main2.xml" value="0.36666666666666664" />
@@ -16,7 +30,11 @@
         <entry key="..\:/Users/MzWazabi/AndroidStudioProjects/MB_PARKING_VACHIRA_HOSPITAL/app/src/main/res/layout/activity_sub_setting_other_main.xml" value="0.24635416666666668" />
         <entry key="..\:/Users/MzWazabi/AndroidStudioProjects/MB_PARKING_VACHIRA_HOSPITAL/app/src/main/res/layout/activity_sub_setting_printer_main.xml" value="0.18840579710144928" />
         <entry key="..\:/Users/MzWazabi/AndroidStudioProjects/MB_PARKING_VACHIRA_HOSPITAL/app/src/main/res/layout/custom_toast.xml" value="0.25" />
+        <entry key="..\:/Users/MzWazabi/AndroidStudioProjects/MB_PARKING_VACHIRA_HOSPITAL/app/src/main/res/layout/list_data_history_carin.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/MzWazabi/AndroidStudioProjects/MB_PARKING_VACHIRA_HOSPITAL/app/src/main/res/layout/nav_header.xml" value="0.18802083333333333" />
         <entry key="..\:/Users/MzWazabi/AndroidStudioProjects/MB_PARKING_VACHIRA_HOSPITAL/app/src/main/res/layout/toast.xml" value="0.24635416666666668" />
+        <entry key="..\:/Users/MzWazabi/AndroidStudioProjects/MB_PARKING_VACHIRA_HOSPITAL/app/src/main/res/menu/drawermenu_inout.xml" value="0.18802083333333333" />
+        <entry key="..\:/Users/MzWazabi/AndroidStudioProjects/MB_PARKING_VACHIRA_HOSPITAL/app/src/main/res/menu/menu_main_clear.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/MzWazabi/AndroidStudioProjects/MB_PARKING_VACHIRA_HOSPITAL/app/src/main/res/xml/nfc_tech_filter.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/MzWazabi/AndroidStudioProjects/MB_PARKING_VACHIRA_HOSPITAL/app/src/main/res/xml/provider_paths.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/MzWazabi/AndroidStudioProjects/MB_PARKING_VACHIRA_HOSPITAL/app/src/main/res/xml/xml.xml" value="0.36666666666666664" />
@@ -28,5 +46,12 @@
   </component>
   <component name="ProjectType">
     <option name="id" value="Android" />
+  </component>
+  <component name="VisualizationToolProject">
+    <option name="state">
+      <ProjectState>
+        <option name="scale" value="0.18802083333333333" />
+      </ProjectState>
+    </option>
   </component>
 </project>

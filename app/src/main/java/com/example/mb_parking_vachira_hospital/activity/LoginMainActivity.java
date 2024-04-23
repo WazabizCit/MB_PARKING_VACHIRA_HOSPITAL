@@ -132,74 +132,80 @@ public class LoginMainActivity extends ImportantMethod implements View.OnClickLi
 
         if (btn_login == v) {
 
-            if (checkdata()) {
 
-
-                progressDoalog = new ProgressDialog(this);
-                progressDoalog.setTitle("กำลังส่งข้อมูล Service");
-                progressDoalog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-                progressDoalog.setMessage("กรุณารอสักครู่...");
-                progressDoalog.setCancelable(false);
-
-                final String username = edit_username.getText().toString().replaceAll(" ", "");
-                final String password = edit_password.getText().toString().replaceAll(" ", "");
-                progressDoalog.show();
+            Intent intent = new Intent(LoginMainActivity.this, MainActivity.class);
+            startActivity(intent);
 
 
 
-
-                HashMap<String, String> SendData = new HashMap<>();
-                SendData.put("username", username);
-                SendData.put("password", password);
-                SendData.put("guardhouse", name_guardhouse);
-                SendData.put("gate", name_gate);
-
-
-                Call<Result_action_mobile_login> call = HttpManager.getInstance(ip_address, port).getService().action_mobile_login(SendData);
-                call.enqueue(new Callback<Result_action_mobile_login>() {
-                    @Override
-                    public void onResponse(Call<Result_action_mobile_login> call, Response<Result_action_mobile_login> response) {
-                        if (response.body() != null) {
-
-                            if (response.body().getBoolStatus() == true) {
-
-                                user_id = response.body().getData().getUserId()+"";
-                                user_address = response.body().getData().getAddress()+"";
-                                user_no_record = response.body().getData().getUserNoRecord()+"";
-                                user_name = response.body().getData().getUserName()+"";
-                                save_references();
-
-                                Intent intent = new Intent(LoginMainActivity.this, MainActivity.class);
-                                startActivity(intent);
-
-
-                            } else {
-
-                                progressDoalog.dismiss();
-                                showToastWarning(response.body().getMessage() + "", LoginMainActivity.this);
-
-                            }
-
-
-                        } else {
-                            progressDoalog.dismiss();
-                            showToastWarning("ทำรายการผิดพลาด", LoginMainActivity.this);
-
-                        }
-
-
-                    }
-
-                    @Override
-                    public void onFailure(Call<Result_action_mobile_login> call, Throwable t) {
-                        showToastWarning("ผิดพลาด" + t.toString(), LoginMainActivity.this);
-                        progressDoalog.dismiss();
-
-                    }
-                });
-
-
-            }
+//            if (checkdata()) {
+//
+//
+//                progressDoalog = new ProgressDialog(this);
+//                progressDoalog.setTitle("กำลังส่งข้อมูล Service");
+//                progressDoalog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+//                progressDoalog.setMessage("กรุณารอสักครู่...");
+//                progressDoalog.setCancelable(false);
+//
+//                final String username = edit_username.getText().toString().replaceAll(" ", "");
+//                final String password = edit_password.getText().toString().replaceAll(" ", "");
+//                progressDoalog.show();
+//
+//
+//
+//
+//                HashMap<String, String> SendData = new HashMap<>();
+//                SendData.put("username", username);
+//                SendData.put("password", password);
+//                SendData.put("guardhouse", name_guardhouse);
+//                SendData.put("gate", name_gate);
+//
+//
+//                Call<Result_action_mobile_login> call = HttpManager.getInstance(ip_address, port).getService().action_mobile_login(SendData);
+//                call.enqueue(new Callback<Result_action_mobile_login>() {
+//                    @Override
+//                    public void onResponse(Call<Result_action_mobile_login> call, Response<Result_action_mobile_login> response) {
+//                        if (response.body() != null) {
+//
+//                            if (response.body().getBoolStatus() == true) {
+//
+//                                user_id = response.body().getData().getUserId()+"";
+//                                user_address = response.body().getData().getAddress()+"";
+//                                user_no_record = response.body().getData().getUserNoRecord()+"";
+//                                user_name = response.body().getData().getUserName()+"";
+//                                save_references();
+//
+//                                Intent intent = new Intent(LoginMainActivity.this, MainActivity.class);
+//                                startActivity(intent);
+//
+//
+//                            } else {
+//
+//                                progressDoalog.dismiss();
+//                                showToastWarning(response.body().getMessage() + "", LoginMainActivity.this);
+//
+//                            }
+//
+//
+//                        } else {
+//                            progressDoalog.dismiss();
+//                            showToastWarning("ทำรายการผิดพลาด", LoginMainActivity.this);
+//
+//                        }
+//
+//
+//                    }
+//
+//                    @Override
+//                    public void onFailure(Call<Result_action_mobile_login> call, Throwable t) {
+//                        showToastWarning("ผิดพลาด" + t.toString(), LoginMainActivity.this);
+//                        progressDoalog.dismiss();
+//
+//                    }
+//                });
+//
+//
+//            }
 
 
         } else if (txt_admin_setting == v) {
