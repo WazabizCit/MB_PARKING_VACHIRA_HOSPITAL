@@ -97,7 +97,7 @@
 
 
     <color name="btn_car_in">#C6FF00</color>
-    <color name="btn_car_out">#FF4081</color>
-    <color name="btn_car_estamp">#1E88E5</color>
+    <color name="btn_car_out">#FF5252</color>
+    <color name="btn_car_estamp">#42A5F5</color>
 
 </resources>

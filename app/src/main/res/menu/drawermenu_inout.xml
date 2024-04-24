@@ -26,7 +26,7 @@ tools:showIn="navigation_view">
 
     <item
         android:id="@+id/item_history_estamp"
-        android:title="ประวัติขาออก"
+        android:title="ประวัติประทับตรา"
         android:icon="@drawable/ic_estamp">
 
     </item>

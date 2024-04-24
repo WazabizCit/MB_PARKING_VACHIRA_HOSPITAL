@@ -1,7 +1,6 @@
 package com.example.mb_parking_vachira_hospital.activity;
 
 
-
 import android.Manifest;
 import android.app.PendingIntent;
 import android.app.ProgressDialog;
@@ -11,9 +10,12 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.nfc.NfcAdapter;
 import android.nfc.Tag;
 import android.os.Bundle;
+import android.os.Environment;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.widget.DrawerLayout;
@@ -27,7 +29,9 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
@@ -40,6 +44,7 @@ import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -67,8 +72,7 @@ import com.example.mb_parking_vachira_hospital.model.Result_action_save_in;
 import com.example.mb_parking_vachira_hospital.model.Sub_data_action_mobile_get_cartype;
 import com.example.mb_parking_vachira_hospital.util.ImportantMethod;
 
-public class InCarMainActivity  extends ImportantMethod implements View.OnClickListener, AdapterView.OnItemSelectedListener {
-
+public class InCarMainActivity extends ImportantMethod implements View.OnClickListener, AdapterView.OnItemSelectedListener {
 
 
     String TAG = "InCarMainActivity";
@@ -85,6 +89,9 @@ public class InCarMainActivity  extends ImportantMethod implements View.OnClickL
     private static final String PREF_USER_ADDRESS = "pref_user_address";
     private static final String PREF_USER_NO_RECORD = "pref_user_no_record";
     private static final String PREF_GUARDHOUSE_IN = "pref_guardhouse_in";
+    private static final String PREF_STATUS_RADIO_CARIN_CAPTURE_IMG = "pref_status_radio_carin_capture_img ";
+    private static final String PREF_STATUS_RADIO_CARIN_NOT_CAPTURE_IMG = "pref_status_radio_carin_not_capture_img ";
+
 
     private static final String PREF_POSID = "pref_posid";
     private static final String PREF_TAXID = "pref_taxid";
@@ -106,13 +113,15 @@ public class InCarMainActivity  extends ImportantMethod implements View.OnClickL
     private String name_mac_address_print = "0";
     private boolean status_radio_carin_not_print;
     private boolean status_radio_carin_print_all;
-
-
+    private boolean status_radio_carin_capture_img;
+    private boolean status_radio_carin_not_capture_img;
 
 
     //////////////////////////////////////////////
 
 
+    TextView title_edit_license_plate;
+    TextView title_edit_id_card;
     private DrawerLayout drawer;
     CardView card_ok;
     EditText edit_license_plate;
@@ -121,6 +130,7 @@ public class InCarMainActivity  extends ImportantMethod implements View.OnClickL
     ImageView imageView;
     Spinner sp_typecar;
     private ProgressDialog progressDoalog;
+    LinearLayout linearLayout_capture_image;
 
 
     //////////////////////////  NFC  //////////////////////////
@@ -154,6 +164,7 @@ public class InCarMainActivity  extends ImportantMethod implements View.OnClickL
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         toolbar.setTitle("ทำรายการขาเข้า");
 
+
         if (getSupportActionBar() != null) {
 
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -161,6 +172,7 @@ public class InCarMainActivity  extends ImportantMethod implements View.OnClickL
 
         }
 
+        loadPreferences();
         inintInstances();
 
         //////////////////////////  NFC  //////////////////////////
@@ -175,10 +187,9 @@ public class InCarMainActivity  extends ImportantMethod implements View.OnClickL
             showToastWarning("nfc not support your device", this);
             return;
         }
-        mPendingIntent = PendingIntent.getActivity(this, 0, new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), PendingIntent.FLAG_IMMUTABLE);
+        mPendingIntent = PendingIntent.getActivity(this, 0, new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), PendingIntent.FLAG_MUTABLE);
 
         //////////////////////////  NFC //////////////////////////
-
 
 
     }
@@ -191,6 +202,9 @@ public class InCarMainActivity  extends ImportantMethod implements View.OnClickL
         btn_camera = findViewById(R.id.btn_camera);
         imageView = findViewById(R.id.imageView);
         sp_typecar = findViewById(R.id.sp_typecar);
+        linearLayout_capture_image = findViewById(R.id.linearLayout_capture_image);
+        title_edit_license_plate = findViewById(R.id.title_edit_license_plate);
+        title_edit_id_card = findViewById(R.id.title_edit_id_card);
 
 
         edit_id_card.setText(tag_id_card);
@@ -199,6 +213,13 @@ public class InCarMainActivity  extends ImportantMethod implements View.OnClickL
 
         sp_typecar.setOnItemSelectedListener(this);
 
+        if (status_radio_carin_not_capture_img == true) {
+
+            linearLayout_capture_image.setVisibility(View.GONE);
+            title_edit_id_card.setText("1");
+            title_edit_license_plate.setText("2");
+
+        }
 
     }
 
@@ -212,9 +233,6 @@ public class InCarMainActivity  extends ImportantMethod implements View.OnClickL
             mAdapter.enableForegroundDispatch(this, mPendingIntent, null, null);
         }
     }
-
-
-
 
 
     @Override
@@ -238,6 +256,11 @@ public class InCarMainActivity  extends ImportantMethod implements View.OnClickL
         progressDoalog.setMessage("กรุณารอสักครู่...");
         progressDoalog.setCancelable(true);
         progressDoalog.show();
+
+
+        edit_id_card.setText("");
+        tag_id_card = null;
+        sp_typecar.setAdapter(null);
 
 
         try {
@@ -308,7 +331,7 @@ public class InCarMainActivity  extends ImportantMethod implements View.OnClickL
 
         } catch (Exception e) {
 
-            showToastSuccess("RFID ไม่ตรงกัน", InCarMainActivity.this);
+            showToastWarning("RFID ไม่ตรงกัน", InCarMainActivity.this);
             tag_id_card = null;
             edit_id_card.setText("เลข Card");
             showToastLog(TAG, "Error: " + e);
@@ -348,7 +371,7 @@ public class InCarMainActivity  extends ImportantMethod implements View.OnClickL
                 edit_id_card.setText("");
                 tag_id_card = null;
                 path_image = "";
-                imageView.setImageResource(R.drawable.ic_image_48);
+                imageView.setImageResource(R.drawable.ic_image_96);
                 sp_typecar.setAdapter(null);
 
                 break;
@@ -367,7 +390,6 @@ public class InCarMainActivity  extends ImportantMethod implements View.OnClickL
         startActivity(intent);
         finish();
     }
-
 
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -405,7 +427,9 @@ public class InCarMainActivity  extends ImportantMethod implements View.OnClickL
 
     private boolean checkdata() {
 
+
         boolean status = true;
+
 
         if (tag_id_card == null) {
             status = false;
@@ -414,9 +438,38 @@ public class InCarMainActivity  extends ImportantMethod implements View.OnClickL
         } else if (edit_license_plate.getText().toString().replaceAll(" ", "").equals("")) {
             status = false;
             showToastWarning("กรุณาใส่ทะเบียนรถ", getApplicationContext());
-        } else if (path_image.equals("")) {
-            status = false;
-            showToastWarning("กรุณาถ่ายรูป", getApplicationContext());
+        } else if (status_radio_carin_capture_img == true) {
+
+            if (path_image.equals("")) {
+                status = false;
+                showToastWarning("กรุณาถ่ายรูป", getApplicationContext());
+            }
+
+
+        } else if (status_radio_carin_not_capture_img == true) {
+
+
+            File myDir = new File("/sdcard/Pictures/");
+            Bitmap finalBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.ic_no_image50);
+            String timeStamp = new SimpleDateFormat("yyyyMMdd").format(new Date());
+            String imageFileName = "IMG_" + timeStamp + ".jpg";
+            path_image = imageFileName;
+            File file = new File(myDir, imageFileName);
+            if (file.exists()) file.delete();
+            try {
+                FileOutputStream out = new FileOutputStream(file);
+                finalBitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
+                out.flush();
+                out.close();
+
+
+            } catch (Exception e) {
+                e.printStackTrace();
+
+            }
+
+            status = true;
+
         }
         return status;
 
@@ -441,6 +494,8 @@ public class InCarMainActivity  extends ImportantMethod implements View.OnClickL
         name_mac_address_print = settings.getString(PREF_MAC_ADDRESS_PRINT, DefaultString);
         status_radio_carin_print_all = settings.getBoolean(PREF_STATUS_RADIO_CARIN_PRINT_ALL, DefaultBoolean);
         status_radio_carin_not_print = settings.getBoolean(PREF_STATUS_RADIO_CARIN_NOT_PRINT, DefaultBoolean);
+        status_radio_carin_capture_img = settings.getBoolean(PREF_STATUS_RADIO_CARIN_CAPTURE_IMG, DefaultBoolean);
+        status_radio_carin_not_capture_img = settings.getBoolean(PREF_STATUS_RADIO_CARIN_NOT_CAPTURE_IMG, DefaultBoolean);
 
 
     }
@@ -557,7 +612,6 @@ public class InCarMainActivity  extends ImportantMethod implements View.OnClickL
     }
 
 
-
     @Override
     public void onClick(View v) {
         if (card_ok == v) {
@@ -581,52 +635,81 @@ public class InCarMainActivity  extends ImportantMethod implements View.OnClickL
                 call.enqueue(new Callback<Result_action_save_in>() {
                     @Override
                     public void onResponse(Call<Result_action_save_in> call, Response<Result_action_save_in> response) {
+                        showToastLog(TAG, response.body() + "");
+
                         if (response.body() != null) {
-                            progressDoalog.dismiss();
+
+
+
                             if (response.body().getBoolStatus() == true) {
 
 
-                                String cardid = response.body().getData().getCardid()+"";
-                                String license_plate = response.body().getData().getLicensePlate()+"";
-                                String str_cartype = response.body().getData().getStrCartype()+"";
-                                String str_cashiername = response.body().getData().getStrCashiername()+"";
-                                String datetime_in = response.body().getData().getDatetimeIn()+"";
+                                String cardid = response.body().getData().getCardid() + "";
+                                String license_plate = response.body().getData().getLicensePlate() + "";
+                                String str_cartype = response.body().getData().getStrCartype() + "";
+                                String str_cashiername = response.body().getData().getStrCashiername() + "";
+                                String datetime_in = response.body().getData().getDatetimeIn() + "";
 
 
-                                RecordHistoryCarInData(cardid,license_plate,cartype_id,user_id,user_no_record,user_address,name_posid,name_taxid,datetime_in,name_guardhouse_in,path_image,str_cartype,str_cashiername);
+                                RecordHistoryCarInData(cardid, license_plate, cartype_id, user_id, user_no_record, user_address, name_posid, name_taxid, datetime_in, name_guardhouse_in, path_image, str_cartype, str_cashiername);
 
-                                if(status_radio_carin_not_print == true){
+                                if (status_radio_carin_not_print == true) {
 
-                                    showToastLog(TAG,"status_radio_carin_not_print");
+                                    showToastLog(TAG, "status_radio_carin_not_print");
 
 
-                                }else if(status_radio_carin_print_all == true){
+                                } else if (status_radio_carin_print_all == true) {
                                     //TODO Print Car IN
 
-                                    showToastLog(TAG,"status_radio_carin_print_all");
+                                    showToastLog(TAG, "status_radio_carin_print_all");
 
 
                                 }
 
-                                showToastSuccess("บันทึกสำเร็จ", getApplicationContext());
-                                edit_license_plate.setText("");
-                                edit_id_card.setText("");
-                                tag_id_card = null;
-                                path_image = "";
-                                imageView.setImageResource(R.drawable.ic_image_48);
-                                sp_typecar.setAdapter(null);
+
+
+                                Handler handler = new Handler();
+                                handler.postDelayed(new Runnable() {
+                                    public void run() {
+                                        progressDoalog.dismiss();
+                                        showToastSuccess("บันทึกสำเร็จ", getApplicationContext());
+                                        edit_license_plate.setText("");
+                                        edit_id_card.setText("");
+                                        tag_id_card = null;
+                                        path_image = "";
+                                        imageView.setImageResource(R.drawable.ic_image_96);
+                                        sp_typecar.setAdapter(null);
+
+                                    }
+                                }, 500);
+
+
+
 
 
 
                             } else {
-                                String text_message = response.body().getStrMessage()+"";
-                                showToastSuccess(text_message + "", getApplicationContext());
-                                edit_license_plate.setText("");
-                                edit_id_card.setText("");
-                                tag_id_card = null;
-                                path_image = "";
-                                imageView.setImageResource(R.drawable.ic_image_48);
-                                sp_typecar.setAdapter(null);
+
+                                Handler handler = new Handler();
+                                handler.postDelayed(new Runnable() {
+                                    public void run() {
+                                        progressDoalog.dismiss();
+                                        String text_message = response.body().getStrMessage() + "";
+                                        showToastWarning(text_message + "", getApplicationContext());
+                                        edit_license_plate.setText("");
+                                        edit_id_card.setText("");
+                                        tag_id_card = null;
+                                        path_image = "";
+                                        imageView.setImageResource(R.drawable.ic_image_96);
+                                        sp_typecar.setAdapter(null);
+
+
+                                    }
+                                }, 500);
+
+
+
+
                             }
 
 
@@ -660,7 +743,7 @@ public class InCarMainActivity  extends ImportantMethod implements View.OnClickL
 
             if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
                 requestPermissions(new String[]{Manifest.permission.CAMERA}, REQUEST_IMAGE_CAPTURE);
-            }else{
+            } else {
 
                 Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 try {
@@ -673,8 +756,6 @@ public class InCarMainActivity  extends ImportantMethod implements View.OnClickL
 
 
         }
-
-
 
 
     }

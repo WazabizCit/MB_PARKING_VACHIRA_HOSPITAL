@@ -1,7 +1,9 @@
 package com.example.mb_parking_vachira_hospital.activity;
 
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -24,6 +26,12 @@ public class MainActivity extends ImportantMethod implements NavigationView.OnNa
     private DrawerLayout drawer;
     CardView btn_gate_in;
     CardView btn_gate_out;
+    private static final String PREFS_NAME = "preferences";
+    private static final String PREF_USER_NAME = "pref_user_name";
+
+
+    private final String DefaultString = "null";
+    private String user_name = "Name - Admin";
 
 
     @Override
@@ -31,28 +39,33 @@ public class MainActivity extends ImportantMethod implements NavigationView.OnNa
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
+        loadPreferences();
+        inintInstances();
+
+    }
+
+    private void inintInstances() {
+
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         toolbar.setTitle("Parking Mobile");
 
 
+
         drawer = findViewById(R.id.drawer_layout);
 
         NavigationView navigationView = findViewById(R.id.nav_view);
+
         View headerView = navigationView.getHeaderView(0);
         TextView navUsername = (TextView) headerView.findViewById(R.id.txt_name);
-        navUsername.setText("User Admin");
+        navUsername.setText("ชื่อ : "+user_name);
         navigationView.setNavigationItemSelectedListener(this);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.open, R.string.close);
+
         drawer.addDrawerListener(toggle);
         toggle.syncState();
-
-        inintInstances();
-
-    }
-
-    private void inintInstances() {
 
 
         btn_gate_in = findViewById(R.id.btn_gate_in);
@@ -61,6 +74,9 @@ public class MainActivity extends ImportantMethod implements NavigationView.OnNa
 
         btn_gate_in.setOnClickListener(this);
         btn_gate_out.setOnClickListener(this);
+
+
+
     }
 
 
@@ -122,14 +138,13 @@ public class MainActivity extends ImportantMethod implements NavigationView.OnNa
 
 
             case R.id.item_logout:
+
+
                 Intent intent = new Intent(MainActivity.this, MainSplashActivity.class);
                 startActivity(intent);
                 finish();
+
                 break;
-
-
-
-
         }
         drawer.closeDrawer(GravityCompat.START);
         return true;
@@ -153,6 +168,23 @@ public class MainActivity extends ImportantMethod implements NavigationView.OnNa
     }
 
 
+
+
+
+
+    private void loadPreferences() {
+
+        SharedPreferences settings = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        // Get value
+
+
+        user_name = settings.getString(PREF_USER_NAME, DefaultString);
+
+
+
+
+
+    }
 
 
 

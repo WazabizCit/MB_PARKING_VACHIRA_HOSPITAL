@@ -21,10 +21,10 @@ tools:openDrawer="start">
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="@color/colorToolbar"
+        android:background="@color/btn_car_in"
         android:elevation="4dp"
         app:popupTheme="@style/Theme.AppCompat.NoActionBar"
-        app:theme="@style/ToolbarColoredBackArrow">
+        app:theme="@style/ToolbarColoredBackArrowBlack">
 
     </android.support.v7.widget.Toolbar>
 
@@ -38,8 +38,10 @@ tools:openDrawer="start">
         android:weightSum="4">
 
         <LinearLayout
+
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:id="@+id/linearLayout_capture_image"
             android:layout_marginTop="10dp"
             android:layout_weight="0.7"
             android:orientation="horizontal"
@@ -64,8 +66,7 @@ tools:openDrawer="start">
                 android:layout_width="0dp"
                 android:layout_weight="2"
                 android:layout_height="match_parent"
-                android:src="@drawable/ic_image_48"
-
+                android:src="@drawable/ic_image_96"
                 />
 
 
@@ -89,7 +90,10 @@ tools:openDrawer="start">
             android:orientation="horizontal"
             android:weightSum="3">
 
+
+
             <TextView
+                android:id="@+id/title_edit_id_card"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_margin="5dp"
@@ -131,6 +135,7 @@ tools:openDrawer="start">
             android:weightSum="3">
 
             <TextView
+                android:id="@+id/title_edit_license_plate"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_margin="5dp"
@@ -212,7 +217,7 @@ tools:openDrawer="start">
                 android:clickable="true"
                 android:foreground="?android:attr/selectableItemBackground"
                 app:cardCornerRadius="20dp"
-                card_view:cardBackgroundColor="#1c4f6f">
+                card_view:cardBackgroundColor="@color/btn_car_in">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -225,7 +230,7 @@ tools:openDrawer="start">
                         android:layout_height="match_parent"
                         android:gravity="center"
                         android:text="ยืนยัน"
-                        android:textColor="@color/colorWhite"
+                        android:textColor="@color/black"
                         android:textSize="22sp"
                         android:textStyle="bold" />
 
