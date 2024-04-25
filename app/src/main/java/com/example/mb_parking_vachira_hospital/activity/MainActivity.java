@@ -26,6 +26,8 @@ public class MainActivity extends ImportantMethod implements NavigationView.OnNa
     private DrawerLayout drawer;
     CardView btn_gate_in;
     CardView btn_gate_out;
+    CardView btn_estamp;
+
     private static final String PREFS_NAME = "preferences";
     private static final String PREF_USER_NAME = "pref_user_name";
 
@@ -70,10 +72,12 @@ public class MainActivity extends ImportantMethod implements NavigationView.OnNa
 
         btn_gate_in = findViewById(R.id.btn_gate_in);
         btn_gate_out = findViewById(R.id.btn_gate_out);
+        btn_estamp = findViewById(R.id.btn_estamp);
 
 
         btn_gate_in.setOnClickListener(this);
         btn_gate_out.setOnClickListener(this);
+        btn_estamp.setOnClickListener(this);
 
 
 
@@ -159,7 +163,12 @@ public class MainActivity extends ImportantMethod implements NavigationView.OnNa
             startActivity(new Intent(MainActivity.this, InCarMainActivity.class));
             finish();
 
-        }else if(v == btn_gate_out){
+        }else if(v == btn_estamp){
+
+            startActivity(new Intent(MainActivity.this, EstampMainActivity.class));
+            finish();
+        }
+        else if(v == btn_gate_out){
 
             startActivity(new Intent(MainActivity.this, OutCarMainActivity.class));
             finish();

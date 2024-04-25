@@ -26,34 +26,47 @@ public class SubSettingOtherMainActivity extends ImportantMethod implements View
 
     private static final String PREFS_NAME = "preferences";
 
+
+    // PARKING
     private static final String PREF_STATUS_RADIO_CARIN_CAPTURE_IMG = "pref_status_radio_carin_capture_img ";
     private static final String PREF_STATUS_RADIO_CARIN_NOT_CAPTURE_IMG = "pref_status_radio_carin_not_capture_img ";
-
     private static final String PREF_STATUS_RADIO_CAROUT_CAPTURE_IMG = "pref_status_radio_carout_capture_img ";
     private static final String PREF_STATUS_RADIO_CAROUT_NOT_CAPTURE_IMG = "pref_status_radio_carout_not_capture_img ";
+
+
+    // ESTAMP
+    private static final String PREF_STATUS_RADIO_TYPE_ESTAMP_DEFAULT = "pref_status_radio_type_estamp_default";
+    private static final String PREF_STATUS_RADIO_TYPE_ESTAMP_INSERT_CODE = "pref_status_radio_type_estamp_insert_code";
+
 
 
     private final int DefaultInt = 0;
     private final boolean DefaultBoolean = false;
     private final String DefaultString = "null";
+
     private boolean status_radio_carin_capture_img;
     private boolean status_radio_carin_not_capture_img;
-
     private boolean status_radio_carout_capture_img;
     private boolean status_radio_carout_not_capture_img;
 
+    private boolean status_radio_type_estamp_default;
+    private boolean status_radio_type_estamp_insert_code;
 
 
-    EditText edit_ip_printer;
+
+
     CardView card_ok;
 
 
 
     RadioButton radio_carin_capture_img;
     RadioButton radio_carin_not_capture_img;
-
     RadioButton radio_carout_capture_img;
     RadioButton radio_carout_not_capture_img;
+    RadioButton radio_type_estamp_default;
+    RadioButton radio_type_estamp_insert_code;
+
+
 
 
     @Override
@@ -82,15 +95,22 @@ public class SubSettingOtherMainActivity extends ImportantMethod implements View
     private void inintInstances() {
 
 
-        edit_ip_printer = findViewById(R.id.edit_ip_printer);
+
         card_ok = findViewById(R.id.card_ok);
 
 
         radio_carin_capture_img = findViewById(R.id.radio_carin_capture_img);
         radio_carin_not_capture_img = findViewById(R.id.radio_carin_not_capture_img);
 
+
+
         radio_carout_capture_img = findViewById(R.id.radio_carout_capture_img);
         radio_carout_not_capture_img = findViewById(R.id.radio_carout_not_capture_img);
+
+        radio_type_estamp_default = findViewById(R.id.radio_type_estamp_default);
+        radio_type_estamp_insert_code = findViewById(R.id.radio_type_estamp_insert_code);
+
+
 
 
 
@@ -103,6 +123,11 @@ public class SubSettingOtherMainActivity extends ImportantMethod implements View
         radio_carout_capture_img.setChecked(status_radio_carout_capture_img);
         radio_carout_not_capture_img.setChecked(status_radio_carout_not_capture_img);
 
+        radio_type_estamp_default.setChecked(status_radio_type_estamp_default);
+        radio_type_estamp_insert_code.setChecked(status_radio_type_estamp_insert_code);
+
+
+
 
 
         radio_carin_capture_img.setOnCheckedChangeListener(this);
@@ -110,6 +135,10 @@ public class SubSettingOtherMainActivity extends ImportantMethod implements View
 
         radio_carout_capture_img.setOnCheckedChangeListener(this);
         radio_carout_not_capture_img.setOnCheckedChangeListener(this);
+
+        radio_type_estamp_default.setOnCheckedChangeListener(this);
+        radio_type_estamp_insert_code.setOnCheckedChangeListener(this);
+
 
 
     }
@@ -183,6 +212,17 @@ public class SubSettingOtherMainActivity extends ImportantMethod implements View
             status_radio_carout_not_capture_img = b;
 
         }
+        else if (compoundButton == radio_type_estamp_default) {
+            status_radio_type_estamp_default = b;
+
+        } else if (compoundButton == radio_type_estamp_insert_code) {
+            status_radio_type_estamp_insert_code = b;
+
+        }
+
+
+
+
 
 
     }
@@ -203,6 +243,8 @@ public class SubSettingOtherMainActivity extends ImportantMethod implements View
         editor.putBoolean(PREF_STATUS_RADIO_CARIN_NOT_CAPTURE_IMG , status_radio_carin_not_capture_img);
         editor.putBoolean(PREF_STATUS_RADIO_CAROUT_CAPTURE_IMG, status_radio_carout_capture_img);
         editor.putBoolean(PREF_STATUS_RADIO_CAROUT_NOT_CAPTURE_IMG , status_radio_carout_not_capture_img);
+        editor.putBoolean(PREF_STATUS_RADIO_TYPE_ESTAMP_DEFAULT, status_radio_type_estamp_default);
+        editor.putBoolean(PREF_STATUS_RADIO_TYPE_ESTAMP_INSERT_CODE , status_radio_type_estamp_insert_code);
 
         editor.commit();
 
@@ -212,8 +254,7 @@ public class SubSettingOtherMainActivity extends ImportantMethod implements View
 
     private void loadPreferences() {
 
-        SharedPreferences settings = getSharedPreferences(PREFS_NAME,
-                Context.MODE_PRIVATE);
+        SharedPreferences settings = getSharedPreferences(PREFS_NAME,Context.MODE_PRIVATE);
 
         // Get value
 
@@ -223,6 +264,8 @@ public class SubSettingOtherMainActivity extends ImportantMethod implements View
         status_radio_carout_capture_img = settings.getBoolean(PREF_STATUS_RADIO_CAROUT_CAPTURE_IMG , DefaultBoolean);
         status_radio_carout_not_capture_img = settings.getBoolean(PREF_STATUS_RADIO_CAROUT_NOT_CAPTURE_IMG , DefaultBoolean);
 
+        status_radio_type_estamp_default = settings.getBoolean(PREF_STATUS_RADIO_TYPE_ESTAMP_DEFAULT , DefaultBoolean);
+        status_radio_type_estamp_insert_code = settings.getBoolean(PREF_STATUS_RADIO_TYPE_ESTAMP_INSERT_CODE , DefaultBoolean);
 
 
     }
