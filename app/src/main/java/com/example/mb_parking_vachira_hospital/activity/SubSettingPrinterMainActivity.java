@@ -1,8 +1,14 @@
 package com.example.mb_parking_vachira_hospital.activity;
 
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothSocket;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.os.Build;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
@@ -16,7 +22,16 @@ import android.widget.RadioGroup;
 
 
 import com.example.mb_parking_vachira_hospital.R;
+import com.example.mb_parking_vachira_hospital.util.FuncPrinter;
 import com.example.mb_parking_vachira_hospital.util.ImportantMethod;
+import com.example.mb_parking_vachira_hospital.util.MiniThermal80MMv4;
+
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+import java.util.UUID;
 
 public class SubSettingPrinterMainActivity extends ImportantMethod implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
 
@@ -49,7 +64,7 @@ public class SubSettingPrinterMainActivity extends ImportantMethod implements Vi
 
     EditText edit_ip_printer;
     CardView card_ok;
-
+    CardView card_test_print;
 
 
     RadioButton radio_carin_not_print;
@@ -90,7 +105,7 @@ public class SubSettingPrinterMainActivity extends ImportantMethod implements Vi
 
         edit_ip_printer = findViewById(R.id.edit_ip_printer);
         card_ok = findViewById(R.id.card_ok);
-
+        card_test_print = findViewById(R.id.card_test_print);
 
         radio_carout_print_all = findViewById(R.id.radio_carout_print_all);
         radio_carout_not_print = findViewById(R.id.radio_carout_not_print);
@@ -104,6 +119,7 @@ public class SubSettingPrinterMainActivity extends ImportantMethod implements Vi
 
 
         card_ok.setOnClickListener(this);
+        card_test_print.setOnClickListener(this);
 
 
         radio_carout_print_all.setChecked(status_radio_carout_print_all);
@@ -175,7 +191,121 @@ public class SubSettingPrinterMainActivity extends ImportantMethod implements Vi
             }
 
 
-        }
+        }else if(view == card_test_print){
+
+
+
+
+            //region    VISITOR_IN_CONTENT
+            String cardNoString = "xxxxx1 : 1234"  ;
+            String headerString = "xxxxx2 : 5555";
+            String description1 = "xxxxx3 : รถยนต์";
+            String description2 = "xxxxx4 : 1234";
+            String description3 = "xxxxx5 : 99/99";
+            String description4 = "xxxxx6 : 02/05/2024 14.43";
+
+
+
+
+            final BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+            final String printerMacAddress = "66:32:14:3A:41:3A";
+            final UUID PRINTER_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
+
+
+
+            BluetoothDevice bluetoothDevice = null;
+            BluetoothSocket bluetoothSocket = null;
+
+
+
+            try {
+
+                //region    CHECK_BLUETOOTH_COMPATIBLE_AND_PERMISSION
+                if(bluetoothAdapter == null){
+
+
+
+                    showToastWarning("Device does not support Bluetooth",this);
+
+                }
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S){
+                    if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+
+                        showToastWarning("Bluetooth connect Permission required",this);
+
+                    }
+                }
+                if (!bluetoothAdapter.isEnabled()){
+
+                    showToastWarning("Bluetooth is turned off",this);
+
+                }
+                if(!BluetoothAdapter.checkBluetoothAddress(printerMacAddress)){
+
+                    showToastWarning("Invalid bluetooth address",this);
+
+                }
+                //endregion CHECK_BLUETOOTH_COMPATIBLE_AND_PERMISSION
+
+
+
+
+                bluetoothDevice = bluetoothAdapter.getRemoteDevice(printerMacAddress);
+                bluetoothSocket = bluetoothDevice.createRfcommSocketToServiceRecord(PRINTER_UUID);
+
+                bluetoothSocket.connect();
+                InputStream inputStream   = bluetoothSocket.getInputStream();
+                OutputStream outputStream = bluetoothSocket.getOutputStream();
+
+
+
+                outputStream.write(MiniThermal80MMv4.Command.ESC_Init);
+                outputStream.write(MiniThermal80MMv4.Command.LF);
+                outputStream.write(MiniThermal80MMv4.PrinterCommand.POS_Print_Text(cardNoString, "CP874",255,2,2,0));
+                outputStream.write(MiniThermal80MMv4.Command.LF);
+                outputStream.write(MiniThermal80MMv4.PrinterCommand.POS_Print_Text(headerString, "CP874",255,1,1,0));
+                outputStream.write(MiniThermal80MMv4.Command.LF);
+                outputStream.write(MiniThermal80MMv4.PrinterCommand.POS_Print_Text(description1, "CP874",255,0,0,0));
+                outputStream.write(MiniThermal80MMv4.Command.LF);
+                outputStream.write(MiniThermal80MMv4.PrinterCommand.POS_Print_Text(description2, "CP874",255,0,0,0));
+                outputStream.write(MiniThermal80MMv4.Command.LF);
+                outputStream.write(MiniThermal80MMv4.PrinterCommand.POS_Print_Text(description3, "CP874",255,0,0,0));
+                outputStream.write(MiniThermal80MMv4.Command.LF);
+                outputStream.write(MiniThermal80MMv4.PrinterCommand.POS_Print_Text(description4, "CP874",255,0,0,0));
+                outputStream.write(MiniThermal80MMv4.Command.LF);
+                outputStream.write(MiniThermal80MMv4.Command.LF);
+                outputStream.write(MiniThermal80MMv4.Command.LF);
+                outputStream.write(MiniThermal80MMv4.Command.LF);
+                outputStream.flush();
+                Thread.sleep(200);
+
+
+
+
+            }catch (Exception exception){
+
+                showToastWarning("Exception thrown : " + exception.getMessage(),this);
+
+
+            }finally {
+                if(bluetoothSocket != null){
+                    try {
+                        bluetoothSocket.close();
+                    }catch (Exception ignored){
+
+                    }
+                }
+            }
+
+
+
+
+
+
+
+
+
+    }
 
     }
 

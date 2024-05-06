@@ -114,8 +114,8 @@ public class LoginMainActivity extends ImportantMethod implements View.OnClickLi
 //        edit_password.setText("12345678");
 
 
-        edit_username.setText("33");
-        edit_password.setText("33");
+        edit_username.setText("2222");
+        edit_password.setText("2222");
 
 
     }

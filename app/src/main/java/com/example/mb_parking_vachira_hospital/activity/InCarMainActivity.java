@@ -4,6 +4,9 @@ package com.example.mb_parking_vachira_hospital.activity;
 import android.Manifest;
 import android.app.PendingIntent;
 import android.app.ProgressDialog;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothSocket;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
@@ -13,11 +16,13 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.nfc.NfcAdapter;
 import android.nfc.Tag;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
@@ -46,11 +51,14 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -71,6 +79,7 @@ import com.example.mb_parking_vachira_hospital.model.Result_action_mobile_get_vi
 import com.example.mb_parking_vachira_hospital.model.Result_action_save_in;
 import com.example.mb_parking_vachira_hospital.model.Sub_data_action_mobile_get_cartype;
 import com.example.mb_parking_vachira_hospital.util.ImportantMethod;
+import com.example.mb_parking_vachira_hospital.util.MiniThermal80MMv4;
 
 public class InCarMainActivity extends ImportantMethod implements View.OnClickListener, AdapterView.OnItemSelectedListener {
 
@@ -89,6 +98,7 @@ public class InCarMainActivity extends ImportantMethod implements View.OnClickLi
     private static final String PREF_USER_ADDRESS = "pref_user_address";
     private static final String PREF_USER_NO_RECORD = "pref_user_no_record";
     private static final String PREF_GUARDHOUSE_IN = "pref_guardhouse_in";
+    private static final String PREF_COMPANYNAME  = "pref_companyname";
     private static final String PREF_STATUS_RADIO_CARIN_CAPTURE_IMG = "pref_status_radio_carin_capture_img ";
     private static final String PREF_STATUS_RADIO_CARIN_NOT_CAPTURE_IMG = "pref_status_radio_carin_not_capture_img ";
 
@@ -110,6 +120,7 @@ public class InCarMainActivity extends ImportantMethod implements View.OnClickLi
     private String user_name;
     private String name_posid;
     private String name_taxid;
+    private String name_company;
     private String name_mac_address_print = "0";
     private boolean status_radio_carin_not_print;
     private boolean status_radio_carin_print_all;
@@ -276,7 +287,7 @@ public class InCarMainActivity extends ImportantMethod implements View.OnClickLi
 
 
             HashMap<String, String> SendData = new HashMap<>();
-            SendData.put("id", tag_id_card);
+            SendData.put("card_id", tag_id_card);
 
 
             Call<Result_action_mobile_checkcardin> call = HttpManager.getInstance(ip_address, port).getService().action_mobile_checkcardin(SendData);
@@ -490,6 +501,8 @@ public class InCarMainActivity extends ImportantMethod implements View.OnClickLi
         name_guardhouse_in = settings.getString(PREF_GUARDHOUSE_IN, DefaultString);
         name_taxid = settings.getString(PREF_TAXID, DefaultString);
         name_posid = settings.getString(PREF_POSID, DefaultString);
+        name_company = settings.getString(PREF_COMPANYNAME, DefaultString);
+
 
         name_mac_address_print = settings.getString(PREF_MAC_ADDRESS_PRINT, DefaultString);
         status_radio_carin_print_all = settings.getBoolean(PREF_STATUS_RADIO_CARIN_PRINT_ALL, DefaultBoolean);
@@ -616,6 +629,8 @@ public class InCarMainActivity extends ImportantMethod implements View.OnClickLi
     public void onClick(View v) {
         if (card_ok == v) {
 
+
+
             if (checkdata()) {
 
                 File file1 = new File("/sdcard/Pictures/" + path_image);
@@ -630,8 +645,17 @@ public class InCarMainActivity extends ImportantMethod implements View.OnClickLi
                 final String currentdate = getCurrentDate();
                 final String timestamp = getCurrentTimeStamp();
 
-//
-                Call<Result_action_save_in> call = HttpManager.getInstance(ip_address, port).getService().action_save_in(tag_id_card, license_plate, cartype_id, user_id, user_no_record, name_guardhouse_in, user_address, body1, body2);
+
+                RequestBody tag_id_card1 = RequestBody.create(MediaType.parse("text/plain"), tag_id_card+"");
+                RequestBody cartype_id1 = RequestBody.create(MediaType.parse("text/plain"), cartype_id+"");
+                RequestBody license_plate1 = RequestBody.create(MediaType.parse("text/plain"), license_plate+"");
+                RequestBody user_id1 = RequestBody.create(MediaType.parse("text/plain"), user_id+"");
+                RequestBody user_no_record1 = RequestBody.create(MediaType.parse("text/plain"), user_no_record+"");
+                RequestBody name_guardhouse_in1 = RequestBody.create(MediaType.parse("text/plain"), name_guardhouse_in+"");
+                RequestBody user_address1 = RequestBody.create(MediaType.parse("text/plain"), user_address);
+
+
+                Call<Result_action_save_in> call = HttpManager.getInstance(ip_address, port).getService().action_save_in(tag_id_card1, license_plate1, cartype_id1, user_id1, user_no_record1, name_guardhouse_in1, user_address1, body1, body2);
                 call.enqueue(new Callback<Result_action_save_in>() {
                     @Override
                     public void onResponse(Call<Result_action_save_in> call, Response<Result_action_save_in> response) {
@@ -662,6 +686,19 @@ public class InCarMainActivity extends ImportantMethod implements View.OnClickLi
                                     //TODO Print Car IN
 
                                     showToastLog(TAG, "status_radio_carin_print_all");
+
+
+                                    String companyname = name_company  ;
+                                    String location = "ตำแหน่งเข้า : xxxxx"  ;
+                                    String cardNoString = "Code : 1234"  ;
+                                    String cardCardId = "Code : 1234"  ;
+                                    String description_license_plate = "ทะเบียน : รถยนต์";
+                                    String description_time_in = "เวลาเข้า : 1234";
+                                    String description_type_car = "ประภท : xxxx";
+
+
+                                    PrintIN(companyname,location,cardNoString,cardCardId,description_license_plate,description_time_in,description_type_car,name_mac_address_print);
+
 
 
                                 }
@@ -816,5 +853,128 @@ public class InCarMainActivity extends ImportantMethod implements View.OnClickLi
 
 
     }
+
+    private void PrintIN(String companyname,String location,String cardNoString,String cardCardId,String description_license_plate,String description_time_in,String description_type_car,String printerMacAddress) {
+
+
+        //  VISITOR_IN_CONTENT
+
+
+
+
+        final BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        final UUID PRINTER_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
+
+
+
+        BluetoothDevice bluetoothDevice = null;
+        BluetoothSocket bluetoothSocket = null;
+
+
+
+        try {
+
+            //region    CHECK_BLUETOOTH_COMPATIBLE_AND_PERMISSION
+            if(bluetoothAdapter == null){
+
+
+
+                showToastWarning("Device does not support Bluetooth",this);
+
+            }
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S){
+                if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+
+                    showToastWarning("Bluetooth connect Permission required",this);
+
+                }
+            }
+            if (!bluetoothAdapter.isEnabled()){
+
+                showToastWarning("Bluetooth is turned off",this);
+
+            }
+            if(!BluetoothAdapter.checkBluetoothAddress(printerMacAddress)){
+
+                showToastWarning("Invalid bluetooth address",this);
+
+            }
+            //endregion CHECK_BLUETOOTH_COMPATIBLE_AND_PERMISSION
+
+
+
+
+            bluetoothDevice = bluetoothAdapter.getRemoteDevice(printerMacAddress);
+            bluetoothSocket = bluetoothDevice.createRfcommSocketToServiceRecord(PRINTER_UUID);
+
+            bluetoothSocket.connect();
+            InputStream inputStream   = bluetoothSocket.getInputStream();
+            OutputStream outputStream = bluetoothSocket.getOutputStream();
+
+
+            //region    SET_ALIGNMENT_TO_LEFT
+
+
+            outputStream.write(MiniThermal80MMv4.Command.ESC_Init);
+            outputStream.write(MiniThermal80MMv4.Command.LF);
+            MiniThermal80MMv4.Command.ESC_Align[2] = 0x01;
+            outputStream.write(MiniThermal80MMv4.Command.ESC_Align);
+            outputStream.write(MiniThermal80MMv4.PrinterCommand.POS_Print_Text(companyname, "TIS-620",255,1,1,1));
+            outputStream.write(MiniThermal80MMv4.Command.LF);
+            outputStream.write(MiniThermal80MMv4.Command.LF);
+            outputStream.write(MiniThermal80MMv4.Command.LF);
+
+            MiniThermal80MMv4.Command.ESC_Align[2] = 0x00;
+            outputStream.write(MiniThermal80MMv4.Command.ESC_Align);
+            outputStream.write(MiniThermal80MMv4.PrinterCommand.POS_Print_Text(location, "TIS-620",255,0,0,0));
+            outputStream.write(MiniThermal80MMv4.Command.LF);
+            outputStream.write(MiniThermal80MMv4.PrinterCommand.POS_Print_Text(cardNoString, "TIS-620",255,0,0,0));
+            outputStream.write(MiniThermal80MMv4.Command.LF);
+            outputStream.write(MiniThermal80MMv4.PrinterCommand.POS_Print_Text(description_license_plate, "TIS-620",255,0,0,0));
+            outputStream.write(MiniThermal80MMv4.Command.LF);
+            outputStream.write(MiniThermal80MMv4.PrinterCommand.POS_Print_Text(description_time_in, "TIS-620",255,0,0,0));
+            outputStream.write(MiniThermal80MMv4.Command.LF);
+            outputStream.write(MiniThermal80MMv4.PrinterCommand.POS_Print_Text(description_type_car, "TIS-620",255,0,0,0));
+            outputStream.write(MiniThermal80MMv4.Command.LF);
+            outputStream.write(MiniThermal80MMv4.Command.LF);
+
+
+            MiniThermal80MMv4.Command.ESC_Align[2] = 0x01;
+            outputStream.write(MiniThermal80MMv4.Command.ESC_Align);
+            byte[] manualStampIconData = MiniThermal80MMv4.PrinterCommand.getCodeBarCommand(cardCardId, 73, 2, 100, 1, 2);
+            outputStream.write(manualStampIconData);
+            outputStream.write(MiniThermal80MMv4.Command.LF);
+            outputStream.write(MiniThermal80MMv4.Command.LF);
+            outputStream.write(MiniThermal80MMv4.Command.LF);
+            outputStream.write(MiniThermal80MMv4.Command.LF);
+            outputStream.write(MiniThermal80MMv4.Command.LF);
+            outputStream.write(MiniThermal80MMv4.Command.LF);
+            outputStream.flush();
+            Thread.sleep(200);
+
+
+
+
+        }catch (Exception exception){
+
+            showToastWarning("Exception thrown : " + exception.getMessage(),this);
+
+
+        }finally {
+            if(bluetoothSocket != null){
+                try {
+                    bluetoothSocket.close();
+                }catch (Exception ignored){
+
+                }
+            }
+        }
+
+
+
+    }
+
+
+
 }
 

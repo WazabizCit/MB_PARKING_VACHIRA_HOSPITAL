@@ -13,6 +13,7 @@ import org.json.JSONObject;
 import java.util.HashMap;
 
 import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -52,16 +53,15 @@ public interface ApiService {
 
 
     @Multipart
-    @Headers("token:33629f7a-03b5-11eb-adc1-0242ac120002")
     @POST("api/SaveActionIn/Save")
     Call<Result_action_save_in> action_save_in(
-            @Query("card_id") String card_id,
-            @Query("license_plate") String license_plate,
-            @Query("cartype_id") String cartype_id,
-            @Query("user_id") String user_id,
-            @Query("user_no_record") String user_no_record,
-            @Query("guardhouse") String guardhouse,
-            @Query("address") String address,
+            @Part("card_id") RequestBody  card_id,
+            @Part("license_plate") RequestBody  license_plate,
+            @Part("cartype_id") RequestBody  cartype_id,
+            @Part("user_id") RequestBody  user_id,
+            @Part("user_no_record") RequestBody  user_no_record,
+            @Part("guardhouse") RequestBody guardhouse,
+            @Part("address") RequestBody  address,
             @Part MultipartBody.Part file1,
             @Part MultipartBody.Part file2
 

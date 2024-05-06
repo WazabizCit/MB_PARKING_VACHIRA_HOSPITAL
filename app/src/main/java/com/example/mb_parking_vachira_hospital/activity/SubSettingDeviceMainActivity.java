@@ -21,6 +21,7 @@ public class SubSettingDeviceMainActivity extends ImportantMethod implements Vie
 
 
     private static final String PREFS_NAME = "preferences";
+    private static final String PREF_COMPANYNAME = "pref_companyname";
     private static final String PREF_GUARDHOUSE = "pref_guardhouse";
     private static final String PREF_GUARDHOUSE_IN = "pref_guardhouse_in";
     private static final String PREF_GUARDHOUSE_OUT = "pref_guardhouse_out";
@@ -33,6 +34,7 @@ public class SubSettingDeviceMainActivity extends ImportantMethod implements Vie
 
     private final int DefaultInt = 0;
     private final String DefaultString = "null";
+    private String name_companyname;
     private String name_guardhouse;
     private String name_guardhouse_in;
     private String name_guardhouse_out;
@@ -42,7 +44,7 @@ public class SubSettingDeviceMainActivity extends ImportantMethod implements Vie
     private String name_posid;
     private String name_taxid;
 
-
+    EditText edit_companyname;
     EditText edit_guardhouse;
     EditText edit_guardhouse_in;
     EditText edit_guardhouse_out;
@@ -78,7 +80,7 @@ public class SubSettingDeviceMainActivity extends ImportantMethod implements Vie
 
     private void inintInstances() {
 
-
+        edit_companyname = findViewById(R.id.edit_companyname);
         edit_guardhouse_in = findViewById(R.id.edit_guardhouse_in);
         edit_guardhouse_out = findViewById(R.id.edit_guardhouse_out);
         edit_gate = findViewById(R.id.edit_gate);
@@ -88,6 +90,10 @@ public class SubSettingDeviceMainActivity extends ImportantMethod implements Vie
         edit_taxid = findViewById(R.id.edit_taxid);
         edit_guardhouse  = findViewById(R.id.edit_guardhouse);
         card_ok = findViewById(R.id.card_ok);
+
+
+        edit_companyname.setText(name_companyname + "");
+        edit_companyname.setSelection(name_companyname.length());
 
         edit_guardhouse.setText(name_guardhouse + "");
         edit_guardhouse.setSelection(name_guardhouse.length());
@@ -160,6 +166,7 @@ public class SubSettingDeviceMainActivity extends ImportantMethod implements Vie
                 Context.MODE_PRIVATE);
 
         // Get value
+        name_companyname = settings.getString(PREF_COMPANYNAME, DefaultString);
         name_guardhouse = settings.getString(PREF_GUARDHOUSE, DefaultString);
         name_guardhouse_in = settings.getString(PREF_GUARDHOUSE_IN, DefaultString);
         name_guardhouse_out = settings.getString(PREF_GUARDHOUSE_OUT, DefaultString);
@@ -189,6 +196,7 @@ public class SubSettingDeviceMainActivity extends ImportantMethod implements Vie
         SharedPreferences.Editor editor = settings.edit();
 
         // Edit and commit
+        editor.putString(PREF_COMPANYNAME, edit_companyname.getText() + "");
         editor.putString(PREF_GUARDHOUSE, edit_guardhouse.getText() + "");
         editor.putString(PREF_GUARDHOUSE_IN, edit_guardhouse_in.getText() + "");
         editor.putString(PREF_GUARDHOUSE_OUT, edit_guardhouse_out.getText() + "");

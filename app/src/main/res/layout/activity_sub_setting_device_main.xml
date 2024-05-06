@@ -25,8 +25,28 @@ tools:context=".activity.SubSettingDeviceMainActivity">
 
 
 
+    <android.support.design.widget.TextInputLayout
 
-<android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="40dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginRight="40dp"
+
+        >
+
+        <EditText
+            android:id="@+id/edit_companyname"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Companyname"
+            android:inputType="text"
+            android:textSize="15sp" />
+
+    </android.support.design.widget.TextInputLayout>
+
+
+    <android.support.design.widget.TextInputLayout
 
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -200,9 +220,9 @@ tools:context=".activity.SubSettingDeviceMainActivity">
     android:layout_width="match_parent"
     android:layout_height="50dp"
     android:layout_marginLeft="40dp"
-    android:layout_marginTop="30dp"
+    android:layout_marginTop="10dp"
     android:layout_marginRight="40dp"
-    android:layout_marginBottom="10dp"
+    android:layout_marginBottom="5dp"
     android:clickable="true"
     android:foreground="?android:attr/selectableItemBackground"
     app:cardCornerRadius="20dp"

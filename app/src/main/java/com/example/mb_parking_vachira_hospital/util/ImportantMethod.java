@@ -2,9 +2,15 @@ package com.example.mb_parking_vachira_hospital.util;
 
 
 
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothSocket;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.os.Build;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
@@ -18,8 +24,11 @@ import android.widget.Toast;
 
 import com.example.mb_parking_vachira_hospital.R;
 
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.UUID;
 
 
 public class ImportantMethod   extends AppCompatActivity {
@@ -130,6 +139,14 @@ public class ImportantMethod   extends AppCompatActivity {
             return null;
         }
     }
+
+
+
+
+
+
+
+
 
 }
 
