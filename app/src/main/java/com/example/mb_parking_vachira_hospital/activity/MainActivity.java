@@ -189,10 +189,6 @@ public class MainActivity extends ImportantMethod implements NavigationView.OnNa
 
         user_name = settings.getString(PREF_USER_NAME, DefaultString);
 
-
-
-
-
     }
 
 

@@ -113,17 +113,54 @@ tools:openDrawer="start">
                 android:layout_weight="2.4"
                 android:gravity="center"
                 android:hint="กรองโปรโมชั่น"
-                android:inputType="number
-
-
-
-
-
-"
+                android:inputType="number"
                 android:maxLength="10" />
 
 
         </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="10dp"
+            android:layout_weight="0.7"
+            android:orientation="horizontal"
+            android:weightSum="3">
+
+
+
+            <TextView
+                android:id="@+id/title_detail_promotion_card"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_margin="5dp"
+                android:layout_weight="0.5"
+                android:background="@color/colorblack"
+                android:gravity="center"
+                android:text="รายละเอียด"
+                android:textColor="@color/colorWhite"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/edit_detail_promotion_card"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_margin="5dp"
+                android:layout_weight="2.4"
+                android:background="@color/colorblack"
+                android:focusable="false"
+                android:gravity="center"
+                android:hint="โปรโมชั่นบัตร"
+                android:textColor="@color/colorWhite"
+                android:textColorHint="@color/colorWhite"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+
+        </LinearLayout>
+
+
 
         <LinearLayout
             android:id="@+id/title_select_promotion"
@@ -149,7 +186,7 @@ tools:openDrawer="start">
 
 
             <Spinner
-                android:id="@+id/sp_typecar"
+                android:id="@+id/sp_promotion"
                 android:layout_width="0dp"
                 android:layout_weight="2"
                 android:layout_height="match_parent"
@@ -159,6 +196,8 @@ tools:openDrawer="start">
 
 
         </LinearLayout>
+
+
 
 
 

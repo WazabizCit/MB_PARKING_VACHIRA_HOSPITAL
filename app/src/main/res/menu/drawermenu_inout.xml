@@ -7,7 +7,12 @@ tools:showIn="navigation_view">
 
 <group android:checkableBehavior="single">
 
+    <item
+        android:id="@+id/item_detail_user_login"
+        android:title="ข้อมูล User"
+        android:icon="@drawable/ic_account_box_black_24dp">
 
+    </item>
 
     <item
         android:id="@+id/item_history_in"

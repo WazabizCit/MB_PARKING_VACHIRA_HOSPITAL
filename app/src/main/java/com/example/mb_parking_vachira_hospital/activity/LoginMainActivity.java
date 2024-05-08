@@ -56,11 +56,13 @@ public class LoginMainActivity extends ImportantMethod implements View.OnClickLi
     private static final String PREF_USER_NAME = "pref_user_name";
     private static final String PREF_USER_ADDRESS = "pref_user_address";
     private static final String PREF_USER_NO_RECORD = "pref_user_no_record";
+    private static final String PREF_USER_LEVEL = "pref_user_level";
 
     private String user_id;
     private String user_address;
     private String user_no_record;
     private String user_name;
+    private String user_level;
 
 
 
@@ -174,6 +176,7 @@ public class LoginMainActivity extends ImportantMethod implements View.OnClickLi
                                 user_address = response.body().getData().getAddress()+"";
                                 user_no_record = response.body().getData().getUserNoRecord()+"";
                                 user_name = response.body().getData().getUserName()+"";
+                                user_level = response.body().getData().getLevel()+"";
                                 save_references();
 
 
@@ -293,6 +296,7 @@ public class LoginMainActivity extends ImportantMethod implements View.OnClickLi
         editor.putString(PREF_USER_ADDRESS,user_address);
         editor.putString(PREF_USER_NO_RECORD,user_no_record);
         editor.putString(PREF_USER_NAME,user_name);
+        editor.putString(PREF_USER_LEVEL,user_level);
 
 
         editor.commit();
