@@ -34,7 +34,11 @@ import android.widget.Toast;
 
 
 import com.example.mb_parking_vachira_hospital.R;
+import com.example.mb_parking_vachira_hospital.dao.DataHistoryCarInDao;
+import com.example.mb_parking_vachira_hospital.dao.DataHistoryEstampDao;
 import com.example.mb_parking_vachira_hospital.manager.HttpManager;
+import com.example.mb_parking_vachira_hospital.model.History_data_carin_dao;
+import com.example.mb_parking_vachira_hospital.model.History_data_estamp_dao;
 import com.example.mb_parking_vachira_hospital.model.Result_action_mobile_checkcardin;
 import com.example.mb_parking_vachira_hospital.model.Result_action_mobile_checkestamp;
 import com.example.mb_parking_vachira_hospital.model.Result_action_mobile_get_promotion;
@@ -66,7 +70,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 
-public class EstampMainActivity extends ImportantMethod implements View.OnClickListener , AdapterView.OnItemSelectedListener {
+public class EstampMainActivity extends ImportantMethod implements View.OnClickListener, AdapterView.OnItemSelectedListener {
 
     String TAG = "EstampMainActivity";
 
@@ -90,7 +94,6 @@ public class EstampMainActivity extends ImportantMethod implements View.OnClickL
     private static final String PREF_STATUS_RADIO_TYPE_ESTAMP_INSERT_CODE = "pref_status_radio_type_estamp_insert_code";
 
 
-
     private final boolean DefaultBoolean = false;
     private final int DefaultInt = 0;
     private final String DefaultString = "null";
@@ -109,8 +112,6 @@ public class EstampMainActivity extends ImportantMethod implements View.OnClickL
     private String name_mac_address_print = "0";
     private boolean status_radio_type_estamp_default;
     private boolean status_radio_type_estamp_insert_code;
-
-
 
 
     //////////////////////////////////////////////
@@ -134,17 +135,12 @@ public class EstampMainActivity extends ImportantMethod implements View.OnClickL
     //////////////////////////  NFC  //////////////////////////
 
 
-
-
     //////////////////////////  SPINNER  //////////////////////////
     private ArrayList<String> mPromotion = new ArrayList<String>();
     private List<Sub_data_action_mobile_getpromotion> promotionArrayList = new ArrayList<>();
 
 
     //////////////////////////  SPINNER  //////////////////////////
-
-
-
 
 
     @Override
@@ -169,7 +165,6 @@ public class EstampMainActivity extends ImportantMethod implements View.OnClickL
         inintInstances();
 
 
-
         //////////////////////////  NFC  //////////////////////////
         mAdapter = NfcAdapter.getDefaultAdapter(this);
         if (!mAdapter.isEnabled()) {
@@ -182,12 +177,9 @@ public class EstampMainActivity extends ImportantMethod implements View.OnClickL
             showToastWarning("nfc not support your device", this);
             return;
         }
-        mPendingIntent = PendingIntent.getActivity(this, 0, new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP),  PendingIntent.FLAG_MUTABLE);
+        mPendingIntent = PendingIntent.getActivity(this, 0, new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), PendingIntent.FLAG_MUTABLE);
 
         //////////////////////////  NFC //////////////////////////
-
-
-
 
 
     }
@@ -211,7 +203,7 @@ public class EstampMainActivity extends ImportantMethod implements View.OnClickL
 
             title_insert_promotion.setVisibility(View.GONE);
 
-        }else{
+        } else {
 
             title_select_promotion.setVisibility(View.GONE);
 
@@ -220,9 +212,7 @@ public class EstampMainActivity extends ImportantMethod implements View.OnClickL
         card_ok.setOnClickListener(this);
 
 
-
     }
-
 
 
     @Override
@@ -322,8 +312,8 @@ public class EstampMainActivity extends ImportantMethod implements View.OnClickL
                         if (response.body().getBoolStatus() == true) {
 
                             edit_id_card.setText(tag_id_card);
-                            String  recordin_no = response.body().getData().getPromotionName()+"";
-                            edit_detail_promotion_card.setText("ชื่อโปรโมชั่นปัจจุบัน : "+"\n" + recordin_no + "\n");
+                            String recordin_no = response.body().getData().getPromotionName() + "";
+                            edit_detail_promotion_card.setText("ชื่อโปรโมชั่นปัจจุบัน : " + "\n" + recordin_no + "\n");
                             get_promotion_estamp_by_level_user(user_level);
 
 
@@ -371,7 +361,6 @@ public class EstampMainActivity extends ImportantMethod implements View.OnClickL
     }
 
 
-
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
 
@@ -386,16 +375,12 @@ public class EstampMainActivity extends ImportantMethod implements View.OnClickL
     }
 
 
-
-
     @Override
     public void onBackPressed() {
         Intent intent = new Intent(EstampMainActivity.this, MainActivity.class);
         startActivity(intent);
         finish();
     }
-
-
 
 
     private void loadPreferences() {
@@ -428,15 +413,12 @@ public class EstampMainActivity extends ImportantMethod implements View.OnClickL
             if (checkdata()) {
 
 
-
                 HashMap<String, String> SendData = new HashMap<>();
                 SendData.put("card_id", tag_id_card);
                 SendData.put("promotion_id", promotion_id);
                 SendData.put("promotion_name", promotion_name);
                 SendData.put("user_id", user_id);
                 SendData.put("user_name", user_name);
-
-
 
 
                 Call<Result_action_mobile_save_promotion> call = HttpManager.getInstance(ip_address, port).getService().action_mobile_save_promotion(SendData);
@@ -448,12 +430,13 @@ public class EstampMainActivity extends ImportantMethod implements View.OnClickL
                             if (response.body().getBoolStatus() == true) {
 
 
-
                                 Handler handler = new Handler();
                                 handler.postDelayed(new Runnable() {
                                     public void run() {
                                         progressDoalog.dismiss();
                                         showToastSuccess("บันทึกสำเร็จ", getApplicationContext());
+                                        RecordHistoryEstampData(tag_id_card,promotion_id,promotion_name,user_id,user_no_record,user_name);
+
                                         edit_detail_promotion_card.setText("");
                                         edit_id_card.setText("");
                                         tag_id_card = null;
@@ -462,7 +445,6 @@ public class EstampMainActivity extends ImportantMethod implements View.OnClickL
 
                                     }
                                 }, 500);
-
 
 
                             } else {
@@ -479,8 +461,6 @@ public class EstampMainActivity extends ImportantMethod implements View.OnClickL
                                         sp_promotion.setAdapter(null);
 
 
-
-
                                     }
                                 }, 500);
 
@@ -489,7 +469,6 @@ public class EstampMainActivity extends ImportantMethod implements View.OnClickL
 
 
                         } else {
-
 
 
                             showToastWarning("ทำรายการผิดพลาด action_mobile_save_promotion", EstampMainActivity.this);
@@ -519,14 +498,11 @@ public class EstampMainActivity extends ImportantMethod implements View.OnClickL
                 });
 
 
-
-
-
             }
 
         }
 
-        }
+    }
 
 
     @Override
@@ -535,8 +511,6 @@ public class EstampMainActivity extends ImportantMethod implements View.OnClickL
         getMenuInflater().inflate(R.menu.menu_main_clear, menu);
         return true;
     }
-
-
 
 
     private String bytesToHexString(byte[] src) {
@@ -559,7 +533,6 @@ public class EstampMainActivity extends ImportantMethod implements View.OnClickL
 
         HashMap<String, String> SendData = new HashMap<>();
         SendData.put("level", level);
-
 
 
         Call<Result_action_mobile_get_promotion> call = HttpManager.getInstance(ip_address, port).getService().action_mobile_get_promotion(SendData);
@@ -620,6 +593,35 @@ public class EstampMainActivity extends ImportantMethod implements View.OnClickL
         }
 
         return status;
+
+    }
+
+
+    private void RecordHistoryEstampData(
+            String tran_estamp_card_id,
+            String tran_estamp_promotion_id,
+            String tran_estamp_promotion_name,
+            String tran_estamp_user_id,
+            String tran_estamp_user_no_record,
+            String tran_estamp_user_name
+
+    ) {
+
+
+        History_data_estamp_dao list = new History_data_estamp_dao();
+        list.setTran_estamp_card_id(tran_estamp_card_id);
+        list.setTran_estamp_promotion_id(tran_estamp_promotion_id);
+        list.setTran_estamp_promotion_name(tran_estamp_promotion_name);
+        list.setTran_estamp_user_id(tran_estamp_user_id);
+        list.setTran_estamp_user_no_record(tran_estamp_user_no_record);
+        list.setTran_estamp_user_name(tran_estamp_user_name);
+
+
+        DataHistoryEstampDao dao = new DataHistoryEstampDao(getApplicationContext());
+        dao.open();
+        dao.add_tran_history_estamp(list);
+        dao.close();
+
 
     }
 

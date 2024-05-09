@@ -74,6 +74,20 @@ public class DbHelper extends SQLiteOpenHelper {
 
 
 
+    private static final String tableDataHistoryEstampCreateSQL = "CREATE TABLE tran_history_estamp("
+            + "tran_estamp_id INTEGER PRIMARY KEY AUTOINCREMENT,"
+            + "tran_estamp_card_id TEXT  DEFAULT '',"
+            + "tran_estamp_promotion_id TEXT  DEFAULT '',"
+            + "tran_estamp_promotion_name TEXT  DEFAULT '',"
+            + "tran_estamp_user_id TEXT  DEFAULT '',"
+            + "tran_estamp_user_no_record TEXT  DEFAULT '',"
+            + "tran_estamp_user_name TEXT DEFAULT '',"
+            + "m_create_date TEXT  DEFAULT  (datetime('now','localtime')),"
+            + "m_delete_flag TEXT  DEFAULT 'N'"
+            + ");";
+
+
+
 
 
 
@@ -87,6 +101,7 @@ public class DbHelper extends SQLiteOpenHelper {
 
         sqLiteDatabase.execSQL(tableDataHistoryCarInCreateSQL);
         sqLiteDatabase.execSQL(tableDataHistoryCarOutCreateSQL);
+        sqLiteDatabase.execSQL(tableDataHistoryEstampCreateSQL);
 
 
 

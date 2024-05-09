@@ -29,6 +29,12 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".activity.HistoryEstampMainActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.DetailUserLoginMainActivity"
+            android:exported="false" />
+        <activity
             android:name=".activity.EstampMainActivity"
             android:exported="false" />
 

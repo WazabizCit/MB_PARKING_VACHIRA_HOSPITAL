@@ -9,7 +9,7 @@ tools:showIn="navigation_view">
 
     <item
         android:id="@+id/item_detail_user_login"
-        android:title="ข้อมูล User"
+        android:title="ข้อมูลเครื่อง"
         android:icon="@drawable/ic_account_box_black_24dp">
 
     </item>

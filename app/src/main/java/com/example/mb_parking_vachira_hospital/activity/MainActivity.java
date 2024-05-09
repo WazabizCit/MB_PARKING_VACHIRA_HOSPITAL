@@ -125,18 +125,33 @@ public class MainActivity extends ImportantMethod implements NavigationView.OnNa
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
 
-            case R.id.item_history_in:
-                Intent intent_in = new Intent(MainActivity.this, HistoryCarInMainActivity.class);
-                startActivity(intent_in);
-                finish();
 
+
+            case R.id.item_detail_user_login:
+                Intent intent_detail_user_login = new Intent(MainActivity.this, DetailUserLoginMainActivity.class);
+                startActivity(intent_detail_user_login);
+                finish();
                 break;
+
+
+            case R.id.item_history_in:
+                Intent history_in = new Intent(MainActivity.this, HistoryCarInMainActivity.class);
+                startActivity(history_in);
+                finish();
+                break;
+
 
             case R.id.item_history_out:
                 Intent intent_out = new Intent(MainActivity.this, HistoryCarOutMainActivity.class);
                 startActivity(intent_out);
                 finish();
+                break;
 
+
+            case R.id.item_history_estamp:
+                Intent history_estamp = new Intent(MainActivity.this, HistoryEstampMainActivity.class);
+                startActivity(history_estamp);
+                finish();
                 break;
 
 
