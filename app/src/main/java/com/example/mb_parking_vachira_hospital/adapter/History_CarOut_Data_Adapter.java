@@ -72,6 +72,9 @@ public class History_CarOut_Data_Adapter extends BaseAdapter {
         TextView txt_time_out  = (TextView) v.findViewById(R.id.txt_time_out);
         TextView txt_time_in  = (TextView) v.findViewById(R.id.txt_time_in);
         TextView txt_price  = (TextView) v.findViewById(R.id.txt_price);
+        TextView txt_proname  = (TextView) v.findViewById(R.id.txt_proname);
+
+
 
 
 
@@ -89,6 +92,7 @@ public class History_CarOut_Data_Adapter extends BaseAdapter {
         String time_in = list.getTran_carout_date_in()+"";
         String time_out = list.getTran_carout_date_out()+"";
         String price = list.getTran_carout_price()+" บาท";
+        String proname = list.getTran_carout_proname()+"";
 
 
 
@@ -104,6 +108,7 @@ public class History_CarOut_Data_Adapter extends BaseAdapter {
         txt_time_in.setText(time_in);
         txt_time_out.setText(time_out);
         txt_price.setText(price);
+        txt_proname.setText(proname);
 
 
         File file1 = new File("/sdcard/Pictures/" + urlImage);

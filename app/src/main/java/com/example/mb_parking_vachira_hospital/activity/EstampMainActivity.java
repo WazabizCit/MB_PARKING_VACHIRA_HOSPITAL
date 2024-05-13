@@ -237,6 +237,7 @@ public class EstampMainActivity extends ImportantMethod implements View.OnClickL
                 edit_detail_promotion_card.setText("");
                 tag_id_card = null;
                 sp_promotion.setAdapter(null);
+                edit_insert_promotion.setText("");
 
 
                 break;
@@ -410,97 +411,204 @@ public class EstampMainActivity extends ImportantMethod implements View.OnClickL
     @Override
     public void onClick(View v) {
         if (card_ok == v) {
+
             if (checkdata()) {
 
-
-                HashMap<String, String> SendData = new HashMap<>();
-                SendData.put("card_id", tag_id_card);
-                SendData.put("promotion_id", promotion_id);
-                SendData.put("promotion_name", promotion_name);
-                SendData.put("user_id", user_id);
-                SendData.put("user_name", user_name);
+                if (status_radio_type_estamp_default == true) {
 
 
-                Call<Result_action_mobile_save_promotion> call = HttpManager.getInstance(ip_address, port).getService().action_mobile_save_promotion(SendData);
-                call.enqueue(new Callback<Result_action_mobile_save_promotion>() {
-                    @Override
-                    public void onResponse(Call<Result_action_mobile_save_promotion> call, Response<Result_action_mobile_save_promotion> response) {
-                        if (response.body() != null) {
-
-                            if (response.body().getBoolStatus() == true) {
-
-
-                                Handler handler = new Handler();
-                                handler.postDelayed(new Runnable() {
-                                    public void run() {
-                                        progressDoalog.dismiss();
-                                        showToastSuccess("บันทึกสำเร็จ", getApplicationContext());
-                                        RecordHistoryEstampData(tag_id_card,promotion_id,promotion_name,user_id,user_no_record,user_name);
-
-                                        edit_detail_promotion_card.setText("");
-                                        edit_id_card.setText("");
-                                        tag_id_card = null;
-                                        sp_promotion.setAdapter(null);
+                    HashMap<String, String> SendData = new HashMap<>();
+                    SendData.put("card_id", tag_id_card);
+                    SendData.put("promotion_id", promotion_id);
+                    SendData.put("promotion_name", promotion_name);
+                    SendData.put("user_id", user_id);
+                    SendData.put("level",   user_level);
+                    SendData.put("user_name", user_name);
 
 
-                                    }
-                                }, 500);
+                    Call<Result_action_mobile_save_promotion> call = HttpManager.getInstance(ip_address, port).getService().action_mobile_save_promotion(SendData);
+                    call.enqueue(new Callback<Result_action_mobile_save_promotion>() {
+                        @Override
+                        public void onResponse(Call<Result_action_mobile_save_promotion> call, Response<Result_action_mobile_save_promotion> response) {
+                            if (response.body() != null) {
+
+                                if (response.body().getBoolStatus() == true) {
+
+
+                                    Handler handler = new Handler();
+                                    handler.postDelayed(new Runnable() {
+                                        public void run() {
+                                            progressDoalog.dismiss();
+                                            showToastSuccess("บันทึกสำเร็จ", getApplicationContext());
+                                            RecordHistoryEstampData(tag_id_card, promotion_id, promotion_name, user_id, user_no_record, user_name);
+
+                                            edit_detail_promotion_card.setText("");
+                                            edit_id_card.setText("");
+                                            tag_id_card = null;
+                                            sp_promotion.setAdapter(null);
+                                            edit_insert_promotion.setText("");
+
+
+                                        }
+                                    }, 500);
+
+
+                                } else {
+
+                                    Handler handler = new Handler();
+                                    handler.postDelayed(new Runnable() {
+                                        public void run() {
+                                            progressDoalog.dismiss();
+                                            String text_message = response.body().getMessage() + "";
+                                            showToastWarning(text_message + "", getApplicationContext());
+                                            edit_detail_promotion_card.setText("");
+                                            edit_id_card.setText("");
+                                            tag_id_card = null;
+                                            sp_promotion.setAdapter(null);
+                                            edit_insert_promotion.setText("");
+
+
+                                        }
+                                    }, 500);
+
+
+                                }
 
 
                             } else {
 
-                                Handler handler = new Handler();
-                                handler.postDelayed(new Runnable() {
-                                    public void run() {
-                                        progressDoalog.dismiss();
-                                        String text_message = response.body().getMessage() + "";
-                                        showToastWarning(text_message + "", getApplicationContext());
-                                        edit_detail_promotion_card.setText("");
-                                        edit_id_card.setText("");
-                                        tag_id_card = null;
-                                        sp_promotion.setAdapter(null);
 
-
-                                    }
-                                }, 500);
+                                showToastWarning("ทำรายการผิดพลาด action_mobile_save_promotion", EstampMainActivity.this);
+                                progressDoalog.dismiss();
+                                edit_detail_promotion_card.setText("");
+                                edit_id_card.setText("");
+                                tag_id_card = null;
+                                edit_insert_promotion.setText("");
+                                sp_promotion.setAdapter(null);
 
 
                             }
 
 
-                        } else {
+                        }
 
-
-                            showToastWarning("ทำรายการผิดพลาด action_mobile_save_promotion", EstampMainActivity.this);
+                        @Override
+                        public void onFailure(Call<Result_action_mobile_save_promotion> call, Throwable t) {
+                            showToastWarning("ผิดพลาด" + t.toString(), EstampMainActivity.this);
                             progressDoalog.dismiss();
                             edit_detail_promotion_card.setText("");
                             edit_id_card.setText("");
                             tag_id_card = null;
+                            edit_insert_promotion.setText("");
                             sp_promotion.setAdapter(null);
 
 
                         }
+                    });
 
 
-                    }
+                }else if(status_radio_type_estamp_insert_code == true){
 
-                    @Override
-                    public void onFailure(Call<Result_action_mobile_save_promotion> call, Throwable t) {
-                        showToastWarning("ผิดพลาด" + t.toString(), EstampMainActivity.this);
-                        progressDoalog.dismiss();
-                        edit_detail_promotion_card.setText("");
-                        edit_id_card.setText("");
-                        tag_id_card = null;
-                        sp_promotion.setAdapter(null);
+                    HashMap<String, String> SendData = new HashMap<>();
+                    SendData.put("card_id", tag_id_card);
+                    SendData.put("promotion_id", edit_insert_promotion.getText()+"");
+                    SendData.put("promotion_name", "");
+                    SendData.put("user_id", user_id);
+                    SendData.put("level",   user_level);
+                    SendData.put("user_name", user_name);
 
 
-                    }
-                });
+                    Call<Result_action_mobile_save_promotion> call = HttpManager.getInstance(ip_address, port).getService().action_mobile_save_promotion(SendData);
+                    call.enqueue(new Callback<Result_action_mobile_save_promotion>() {
+                        @Override
+                        public void onResponse(Call<Result_action_mobile_save_promotion> call, Response<Result_action_mobile_save_promotion> response) {
+                            if (response.body() != null) {
 
+                                if (response.body().getBoolStatus() == true) {
+
+
+                                    Handler handler = new Handler();
+                                    handler.postDelayed(new Runnable() {
+                                        public void run() {
+                                            progressDoalog.dismiss();
+                                            showToastSuccess("บันทึกสำเร็จ", getApplicationContext());
+                                            RecordHistoryEstampData(tag_id_card, promotion_id, promotion_name, user_id, user_no_record, user_name);
+
+                                            edit_detail_promotion_card.setText("");
+                                            edit_id_card.setText("");
+                                            tag_id_card = null;
+                                            edit_insert_promotion.setText("");
+                                            sp_promotion.setAdapter(null);
+
+
+                                        }
+                                    }, 500);
+
+
+                                } else {
+
+                                    Handler handler = new Handler();
+                                    handler.postDelayed(new Runnable() {
+                                        public void run() {
+                                            progressDoalog.dismiss();
+                                            String text_message = response.body().getMessage() + "";
+                                            showToastWarning(text_message + "", getApplicationContext());
+                                            edit_detail_promotion_card.setText("");
+                                            edit_id_card.setText("");
+                                            tag_id_card = null;
+                                            edit_insert_promotion.setText("");
+                                            sp_promotion.setAdapter(null);
+
+
+                                        }
+                                    }, 500);
+
+
+                                }
+
+
+                            } else {
+
+
+                                showToastWarning("ทำรายการผิดพลาด action_mobile_save_promotion", EstampMainActivity.this);
+                                progressDoalog.dismiss();
+                                edit_detail_promotion_card.setText("");
+                                edit_id_card.setText("");
+                                tag_id_card = null;
+                                edit_insert_promotion.setText("");
+                                sp_promotion.setAdapter(null);
+
+
+                            }
+
+
+                        }
+
+                        @Override
+                        public void onFailure(Call<Result_action_mobile_save_promotion> call, Throwable t) {
+                            showToastWarning("ผิดพลาด" + t.toString(), EstampMainActivity.this);
+                            progressDoalog.dismiss();
+                            edit_detail_promotion_card.setText("");
+                            edit_id_card.setText("");
+                            tag_id_card = null;
+                            edit_insert_promotion.setText("");
+                            sp_promotion.setAdapter(null);
+
+
+                        }
+                    });
+
+
+
+
+
+                }
 
             }
 
+
         }
+
 
     }
 

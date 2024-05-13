@@ -53,6 +53,7 @@
                 android:layout_marginRight="40dp"
                 android:layout_marginBottom="10dp"
                 android:clickable="true"
+                android:visibility="gone"
                 android:foreground="?android:attr/selectableItemBackground"
                 app:cardCornerRadius="20dp"
                 card_view:cardBackgroundColor="@color/btn_car_in">

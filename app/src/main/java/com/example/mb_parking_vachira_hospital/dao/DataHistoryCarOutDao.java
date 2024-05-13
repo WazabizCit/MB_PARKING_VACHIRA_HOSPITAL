@@ -66,6 +66,7 @@ public class DataHistoryCarOutDao {
             dao.setTran_carout_member_decreaseCashOrHour(cursor.getString(24));
             dao.setTran_carout_member_pro_minute_balance_use(cursor.getString(25));
             dao.setTran_carout_overdate(cursor.getString(26));
+            dao.setTran_carout_proname(cursor.getString(27));
             list.add(dao);
             cursor.moveToNext();
         }
@@ -104,6 +105,7 @@ public class DataHistoryCarOutDao {
         values.put("tran_carout_member_decreaseCashOrHour", list.getTran_carout_member_decreaseCashOrHour());
         values.put("tran_carout_member_pro_minute_balance_use", list.getTran_carout_member_pro_minute_balance_use());
         values.put("tran_carout_overdate", list.getTran_carout_overdate());
+        values.put("tran_carout_proname", list.getTran_carout_proname());
 
 
 

@@ -167,6 +167,7 @@ public class OutCarMainActivity  extends ImportantMethod implements View.OnClick
     private String member_pro_minute_balance_use = "0";
     private String overdate = "0";
     private String cartype_name = "";
+    private String pro_name = "";
     ////////////////////Params Action Save Out////////////////////////////
 
 
@@ -513,6 +514,7 @@ public class OutCarMainActivity  extends ImportantMethod implements View.OnClick
                             isMember = response.body().getIsMember() + "";
                             overdate = response.body().getVisitor().getPriceOverdate() + "";
                             cartype_name = response.body().getVisitor().getCartypeName() + "";
+                            pro_name = response.body().getVisitor().getProName() + "";
 
 
                             showToastLog(TAG, "visitor");
@@ -750,7 +752,9 @@ public class OutCarMainActivity  extends ImportantMethod implements View.OnClick
             String tran_carout_member_cash_balance,
             String tran_carout_member_decreaseCashOrHour,
             String tran_carout_member_pro_minute_balance_use,
-            String tran_carout_overdate
+            String tran_carout_overdate,
+            String tran_carout_proname
+
 
     ) {
 
@@ -782,6 +786,7 @@ public class OutCarMainActivity  extends ImportantMethod implements View.OnClick
         list.setTran_carout_member_decreaseCashOrHour(tran_carout_member_decreaseCashOrHour);
         list.setTran_carout_member_pro_minute_balance_use(tran_carout_member_pro_minute_balance_use);
         list.setTran_carout_overdate(tran_carout_overdate);
+        list.setTran_carout_proname(tran_carout_proname);
         DataHistoryCarOutDao dao = new DataHistoryCarOutDao(getApplicationContext());
         dao.open();
         dao.add_tran_history_car_out(list);
@@ -853,7 +858,7 @@ public class OutCarMainActivity  extends ImportantMethod implements View.OnClick
 //
 
                                 RecordHistoryCarOutData(user_id, user_name, user_no_record, user_address, name_posid, name_taxid, cartype_name, path_image, name_guardhouse_out,
-                                        receipt_no, date_in, date_out, tag_id_card, recordin_no, license, promotion_id, price, losscard, discount, hours, minute, isMember, member_cash_balance, member_decreaseCashOrHour, member_pro_minute_balance_use, overdate);
+                                        receipt_no, date_in, date_out, tag_id_card, recordin_no, license, promotion_id, price, losscard, discount, hours, minute, isMember, member_cash_balance, member_decreaseCashOrHour, member_pro_minute_balance_use, overdate,pro_name);
 
 
                                 if (status_radio_carout_not_print == true) {
@@ -867,7 +872,7 @@ public class OutCarMainActivity  extends ImportantMethod implements View.OnClick
                                     showToastLog(TAG, "status_radio_carout_print_all");
 
                                     PrintOUT(name_companyname, name_mac_address_print, name_posid, name_taxid, tag_id_card,
-                                            timestamp_in, timestamp_out, license, price, receipt_no,hours,minute);
+                                            timestamp_in, timestamp_out, license, price, receipt_no,hours,minute,pro_name);
 
 
                                 } else if (status_radio_carout_print_price_only == true) {
@@ -880,7 +885,7 @@ public class OutCarMainActivity  extends ImportantMethod implements View.OnClick
                                     }else{
 
                                         PrintOUT(name_companyname, name_mac_address_print, name_posid, name_taxid, tag_id_card,
-                                                timestamp_in, timestamp_out, license, price, receipt_no,hours,minute);
+                                                timestamp_in, timestamp_out, license, price, receipt_no,hours,minute,pro_name);
 
                                     }
 
@@ -996,7 +1001,8 @@ public class OutCarMainActivity  extends ImportantMethod implements View.OnClick
     private void PrintOUT(
             String companyname, String printerMacAddress, String name_posid, String name_taxid,
             String cardCardId, String description_time_in, String description_time_out,
-            String license_plate, String amount, String receipt , String hours, String  minutes
+            String license_plate, String amount, String receipt , String hours, String  minutes,
+            String  proname
     ) {
 
 
@@ -1088,6 +1094,8 @@ public class OutCarMainActivity  extends ImportantMethod implements View.OnClick
             outputStream.write(MiniThermal80MMv4.PrinterCommand.POS_Print_Text("เวลาออก/Out : " + description_time_out, "TIS-620", 255, 0, 0, 0));
             outputStream.write(MiniThermal80MMv4.Command.LF);
             outputStream.write(MiniThermal80MMv4.PrinterCommand.POS_Print_Text("เวลาจอด : " + hours + " ชั่วโมง" +" " + minutes+" นาที", "TIS-620", 255, 0, 0, 0));
+            outputStream.write(MiniThermal80MMv4.Command.LF);
+            outputStream.write(MiniThermal80MMv4.PrinterCommand.POS_Print_Text("ชื่อโปร : " + proname , "TIS-620", 255, 0, 0, 0));
             outputStream.write(MiniThermal80MMv4.Command.LF);
             outputStream.write(MiniThermal80MMv4.PrinterCommand.POS_Print_Text("ค่าบริการ/Amount : " + amount + " บาท", "TIS-620", 255, 0, 0, 0));
             outputStream.write(MiniThermal80MMv4.Command.LF);

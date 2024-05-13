@@ -69,6 +69,7 @@ public class DbHelper extends SQLiteOpenHelper {
             + "tran_carout_member_decreaseCashOrHour TEXT  DEFAULT '',"
             + "tran_carout_member_pro_minute_balance_use TEXT  DEFAULT '',"
             + "tran_carout_overdate TEXT  DEFAULT '',"
+            + "tran_carout_proname TEXT  DEFAULT '',"
             + "m_create_date TEXT  DEFAULT  (datetime('now','localtime')),"
             + "m_delete_flag TEXT  DEFAULT 'N'"
             + ");";

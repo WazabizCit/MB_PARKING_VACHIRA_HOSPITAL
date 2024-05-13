@@ -120,8 +120,8 @@ public class LoginMainActivity extends ImportantMethod implements View.OnClickLi
 //        edit_password.setText("12345678");
 
 
-        edit_username.setText("2222");
-        edit_password.setText("2222");
+        edit_username.setText("");
+        edit_password.setText("");
         textView_namecompany.setText(name_companyname+"");
 
 
@@ -227,33 +227,31 @@ public class LoginMainActivity extends ImportantMethod implements View.OnClickLi
 
         } else if (txt_admin_setting == v) {
 
-            Intent intent = new Intent(LoginMainActivity.this, SettingMainActivity.class);
-            startActivity(intent);
 
 
-//            if(checkdata()){
-//                final String username = edit_username.getText().toString().replaceAll(" ", "");
-//                final String password = edit_password.getText().toString().replaceAll(" ", "");
-//
-//
-//                if(username.equals("cit") && password.equals("12345678")){
-//
-//                    Intent intent = new Intent(LoginMainActivity.this, SettingMainActivity.class);
-//                    startActivity(intent);
-//
-//                }else {
-//
-//
-//
-//                    showToastWarning("Username หรือ Password Admin ไม่ถูกต้อง",LoginMainActivity.this);
-//
-//                }
-//
-//
-//
-//            }
-//
-//
+            if(checkdata()){
+                final String username = edit_username.getText().toString().replaceAll(" ", "");
+                final String password = edit_password.getText().toString().replaceAll(" ", "");
+
+
+                if(username.equals("cit") && password.equals("12345678")){
+
+                    Intent intent = new Intent(LoginMainActivity.this, SettingMainActivity.class);
+                    startActivity(intent);
+
+                }else {
+
+
+
+                    showToastWarning("Username หรือ Password Admin ไม่ถูกต้อง",LoginMainActivity.this);
+
+                }
+
+
+
+            }
+
+
 
 
 

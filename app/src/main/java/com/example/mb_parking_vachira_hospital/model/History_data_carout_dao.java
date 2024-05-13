@@ -35,7 +35,15 @@ public class History_data_carout_dao {
     String tran_carout_member_decreaseCashOrHour;
     String tran_carout_member_pro_minute_balance_use;
     String tran_carout_overdate;
+    String tran_carout_proname;
 
+    public String getTran_carout_proname() {
+        return tran_carout_proname;
+    }
+
+    public void setTran_carout_proname(String tran_carout_proname) {
+        this.tran_carout_proname = tran_carout_proname;
+    }
 
     public String getTran_carout_user_name() {
         return tran_carout_user_name;

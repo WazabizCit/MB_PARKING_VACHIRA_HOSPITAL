@@ -153,9 +153,10 @@ public class HistoryCarOutMainActivity  extends ImportantMethod {
                         String receipt = ((History_data_carout_dao) adapter.getItem(position)).getTran_carout_receipt();
                         String minute = ((History_data_carout_dao) adapter.getItem(position)).getTran_carout_minute();
                         String hours = ((History_data_carout_dao) adapter.getItem(position)).getTran_carout_hours();
+                        String proname = ((History_data_carout_dao) adapter.getItem(position)).getTran_carout_proname();
                         dialog.dismiss();
 
-                        PrintOUT(name_company,name_mac_address_print,name_posid,name_taxid,id_card,timestamp_in,timestamp_out,license_plate,price,receipt,hours,minute);
+                        PrintOUT(name_company,name_mac_address_print,name_posid,name_taxid,id_card,timestamp_in,timestamp_out,license_plate,price,receipt,hours,minute,proname);
                     }
                 });
                 AlertDialog dialog = builder.create();
@@ -250,13 +251,11 @@ public class HistoryCarOutMainActivity  extends ImportantMethod {
 
 
 
-
-
-
     private void PrintOUT(
             String companyname, String printerMacAddress, String name_posid, String name_taxid,
             String cardCardId, String description_time_in, String description_time_out,
-            String license_plate, String amount, String receipt , String hours, String  minutes
+            String license_plate, String amount, String receipt , String hours, String  minutes,
+            String  proname
     ) {
 
 
@@ -348,6 +347,8 @@ public class HistoryCarOutMainActivity  extends ImportantMethod {
             outputStream.write(MiniThermal80MMv4.PrinterCommand.POS_Print_Text("เวลาออก/Out : " + description_time_out, "TIS-620", 255, 0, 0, 0));
             outputStream.write(MiniThermal80MMv4.Command.LF);
             outputStream.write(MiniThermal80MMv4.PrinterCommand.POS_Print_Text("เวลาจอด : " + hours + " ชั่วโมง" +" " + minutes+" นาที", "TIS-620", 255, 0, 0, 0));
+            outputStream.write(MiniThermal80MMv4.Command.LF);
+            outputStream.write(MiniThermal80MMv4.PrinterCommand.POS_Print_Text("ชื่อโปร : " + proname , "TIS-620", 255, 0, 0, 0));
             outputStream.write(MiniThermal80MMv4.Command.LF);
             outputStream.write(MiniThermal80MMv4.PrinterCommand.POS_Print_Text("ค่าบริการ/Amount : " + amount + " บาท", "TIS-620", 255, 0, 0, 0));
             outputStream.write(MiniThermal80MMv4.Command.LF);
