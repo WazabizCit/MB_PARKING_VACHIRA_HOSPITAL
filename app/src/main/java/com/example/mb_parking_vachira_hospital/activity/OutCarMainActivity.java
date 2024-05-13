@@ -1,7 +1,11 @@
 package com.example.mb_parking_vachira_hospital.activity;
 
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothSocket;
 import android.graphics.BitmapFactory;
 import android.os.Handler;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.Manifest;
@@ -43,11 +47,14 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -65,6 +72,7 @@ import com.example.mb_parking_vachira_hospital.model.Result_action_mobile_calcul
 import com.example.mb_parking_vachira_hospital.model.Result_action_save_out;
 import com.example.mb_parking_vachira_hospital.model.Sub_data_action_mobile_get_cartype;
 import com.example.mb_parking_vachira_hospital.util.ImportantMethod;
+import com.example.mb_parking_vachira_hospital.util.MiniThermal80MMv4;
 
 public class OutCarMainActivity  extends ImportantMethod implements View.OnClickListener {
 
@@ -78,6 +86,7 @@ public class OutCarMainActivity  extends ImportantMethod implements View.OnClick
     private static final String PREF_USER_ADDRESS = "pref_user_address";
     private static final String PREF_USER_NO_RECORD = "pref_user_no_record";
     private static final String PREF_USER_NAME = "pref_user_name";
+    private static final String PREF_COMPANYNAME = "pref_companyname";
 
     private static final String PREF_MAC_ADDRESS_PRINT = "pref_mac_address_print";
     private static final String PREF_STATUS_RADIO_CAROUT_NOT_PRINT = "pref_status_radio_carout_not_print";
@@ -90,7 +99,6 @@ public class OutCarMainActivity  extends ImportantMethod implements View.OnClick
 
     private static final String PREF_STATUS_RADIO_CAROUT_CAPTURE_IMG = "pref_status_radio_carout_capture_img ";
     private static final String PREF_STATUS_RADIO_CAROUT_NOT_CAPTURE_IMG = "pref_status_radio_carout_not_capture_img ";
-
 
 
     private static final String PREF_IP_ADDRESS = "pref_ip_address";
@@ -121,6 +129,7 @@ public class OutCarMainActivity  extends ImportantMethod implements View.OnClick
     private String name_machinename;
     private String name_posid;
     private String name_taxid;
+    private String name_companyname;
 
     private int name_nfc_sector_id = 0;
     private int name_nfc_block_in_sector_id = 0;
@@ -133,8 +142,6 @@ public class OutCarMainActivity  extends ImportantMethod implements View.OnClick
 
     private boolean status_radio_carout_capture_img;
     private boolean status_radio_carout_not_capture_img;
-
-
 
 
     private String name_mac_address_print = "0";
@@ -174,7 +181,6 @@ public class OutCarMainActivity  extends ImportantMethod implements View.OnClick
     TextView title_edit_id_card;
 
 
-
     //////////////////////////  NFC  //////////////////////////
     private NfcAdapter mAdapter;
     private PendingIntent mPendingIntent;
@@ -193,7 +199,6 @@ public class OutCarMainActivity  extends ImportantMethod implements View.OnClick
     private ArrayList<String> mMembercartype = new ArrayList<String>();
     private List<Sub_data_action_mobile_get_cartype> cartypeArrayList = new ArrayList<>();
     //////////////////////////  SPINNER  //////////////////////////
-
 
 
     @Override
@@ -228,7 +233,7 @@ public class OutCarMainActivity  extends ImportantMethod implements View.OnClick
             showToastWarning("nfc not support your device", this);
             return;
         }
-        mPendingIntent = PendingIntent.getActivity(this, 0, new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP),  PendingIntent.FLAG_MUTABLE);
+        mPendingIntent = PendingIntent.getActivity(this, 0, new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), PendingIntent.FLAG_MUTABLE);
 
         //////////////////////////  NFC //////////////////////////
 
@@ -247,7 +252,6 @@ public class OutCarMainActivity  extends ImportantMethod implements View.OnClick
         linearLayout_capture_image = findViewById(R.id.linearLayout_capture_image);
 
 
-
         edit_id_card.setText(tag_id_card);
         card_ok.setOnClickListener(this);
         btn_camera.setOnClickListener(this);
@@ -260,7 +264,6 @@ public class OutCarMainActivity  extends ImportantMethod implements View.OnClick
 
 
         }
-
 
 
     }
@@ -364,7 +367,6 @@ public class OutCarMainActivity  extends ImportantMethod implements View.OnClick
             showToastLog(TAG, "formattag_DEC: " + tag_id_card);
 
 
-
             readMifareClassic(tag);
 
         } catch (Exception e) {
@@ -457,15 +459,14 @@ public class OutCarMainActivity  extends ImportantMethod implements View.OnClick
                 stringBlock += "\n";
 
 
-
                 // showToastLog(TAG, stringBlock + "");
 
-                fun_calculationparking(stringBlock+"");
+                fun_calculationparking(stringBlock + "");
 
 
             } else {
                 progressDoalog.dismiss();
-                showToastWarning("อ่าน Promotion ผิดพลาด", getApplicationContext());
+                showToastWarning("อ่าน Promotion ผิดพลาด กรุณาทำรายการใหม่", getApplicationContext());
             }
 
 
@@ -475,7 +476,7 @@ public class OutCarMainActivity  extends ImportantMethod implements View.OnClick
 
     private void fun_calculationparking(String nfc_promotion) {
 
-        showToastLog(TAG,nfc_promotion);
+        showToastLog(TAG, nfc_promotion);
 
 
         HashMap<String, String> SendData = new HashMap<>();
@@ -583,8 +584,6 @@ public class OutCarMainActivity  extends ImportantMethod implements View.OnClick
                     } else {
 
 
-
-
                         showToastWarning(response.body().getMessage() + "", OutCarMainActivity.this);
                         progressDoalog.dismiss();
 
@@ -610,9 +609,7 @@ public class OutCarMainActivity  extends ImportantMethod implements View.OnClick
         });
 
 
-
     }
-
 
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -656,7 +653,7 @@ public class OutCarMainActivity  extends ImportantMethod implements View.OnClick
             status = false;
             showToastWarning("กรุณาอ่าน Card ", getApplicationContext());
 
-        }else if (status_radio_carout_capture_img == true) {
+        } else if (status_radio_carout_capture_img == true) {
 
             if (path_image.equals("")) {
                 status = false;
@@ -664,8 +661,7 @@ public class OutCarMainActivity  extends ImportantMethod implements View.OnClick
             }
 
 
-        }
-        else if (status_radio_carout_not_capture_img == true) {
+        } else if (status_radio_carout_not_capture_img == true) {
 
 
             File myDir = new File("/sdcard/Pictures/");
@@ -714,11 +710,7 @@ public class OutCarMainActivity  extends ImportantMethod implements View.OnClick
         name_taxid = settings.getString(PREF_TAXID, DefaultString);
         name_nfc_sector_id = settings.getInt(PREF_NFC_SECTOR_ID, DefaultInt);
         name_nfc_block_in_sector_id = settings.getInt(PREF_NFC_BLOCK_IN_SECTOR_ID, DefaultInt);
-
-
-
-
-
+        name_companyname = settings.getString(PREF_COMPANYNAME, DefaultString);
 
 
         name_mac_address_print = settings.getString(PREF_MAC_ADDRESS_PRINT, DefaultString);
@@ -807,18 +799,45 @@ public class OutCarMainActivity  extends ImportantMethod implements View.OnClick
 
             if (checkdata()) {
 
+                progressDoalog.show();
+
                 File file1 = new File("/sdcard/Pictures/" + path_image);
 
                 RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file1);
                 MultipartBody.Part body1 = MultipartBody.Part.createFormData("file_img_license", file1.getName(), requestFile);
                 MultipartBody.Part body2 = MultipartBody.Part.createFormData("file_img_driver", file1.getName(), requestFile);
-                progressDoalog.show();
 
+
+                RequestBody tag_id_card1 = RequestBody.create(MediaType.parse("text/plain"), tag_id_card + "");
+                RequestBody recordin_no1 = RequestBody.create(MediaType.parse("text/plain"), recordin_no + "");
+                RequestBody license1 = RequestBody.create(MediaType.parse("text/plain"), license + "");
+                RequestBody date_in1 = RequestBody.create(MediaType.parse("text/plain"), date_in + "");
+                RequestBody date_out1 = RequestBody.create(MediaType.parse("text/plain"), date_out + "");
+                RequestBody promotion_id1 = RequestBody.create(MediaType.parse("text/plain"), promotion_id + "");
+                RequestBody price1 = RequestBody.create(MediaType.parse("text/plain"), price + "");
+                RequestBody discount1 = RequestBody.create(MediaType.parse("text/plain"), discount + "");
+                RequestBody losscard1 = RequestBody.create(MediaType.parse("text/plain"), losscard + "");
+                RequestBody hours1 = RequestBody.create(MediaType.parse("text/plain"), hours + "");
+                RequestBody minute1 = RequestBody.create(MediaType.parse("text/plain"), minute + "");
+                RequestBody user_id1 = RequestBody.create(MediaType.parse("text/plain"), user_id + "");
+                RequestBody user_no_record1 = RequestBody.create(MediaType.parse("text/plain"), user_no_record + "");
+                RequestBody user_name1 = RequestBody.create(MediaType.parse("text/plain"), user_name + "");
+                RequestBody name_guardhouse_out1 = RequestBody.create(MediaType.parse("text/plain"), name_guardhouse_out + "");
+                RequestBody name_posid1 = RequestBody.create(MediaType.parse("text/plain"), name_posid + "");
+                RequestBody isMember1 = RequestBody.create(MediaType.parse("text/plain"), isMember + "");
+                RequestBody member_cash_balance1 = RequestBody.create(MediaType.parse("text/plain"), member_cash_balance + "");
+                RequestBody member_decreaseCashOrHour1 = RequestBody.create(MediaType.parse("text/plain"), member_decreaseCashOrHour + "");
+                RequestBody member_pro_minute_balance_use1 = RequestBody.create(MediaType.parse("text/plain"), member_pro_minute_balance_use + "");
+                RequestBody overdate1 = RequestBody.create(MediaType.parse("text/plain"), overdate + "");
 
                 Call<Result_action_save_out> call = HttpManager.getInstance(ip_address, port).getService().action_save_out(
-                        tag_id_card, recordin_no, license, date_in, date_out, promotion_id, price, discount, losscard, hours, minute, user_id, user_no_record,
-                        user_name, name_guardhouse_out, name_posid, name_guardhouse_out, isMember, member_cash_balance, member_decreaseCashOrHour,
-                        member_pro_minute_balance_use, overdate, body1, body2);
+                        tag_id_card1,
+                        recordin_no1,
+                        license1, date_in1, date_out1, promotion_id1, price1, discount1, losscard1, hours1, minute1, user_id1, user_no_record1,
+                        user_name1, name_guardhouse_out1, name_posid1, name_guardhouse_out1, isMember1, member_cash_balance1, member_decreaseCashOrHour1,
+                        member_pro_minute_balance_use1, overdate1, body1, body2);
+
+
                 call.enqueue(new Callback<Result_action_save_out>() {
                     @Override
                     public void onResponse(Call<Result_action_save_out> call, Response<Result_action_save_out> response) {
@@ -828,7 +847,10 @@ public class OutCarMainActivity  extends ImportantMethod implements View.OnClick
                             if (response.body().getBoolStatus() == true) {
 
                                 String receipt_no = response.body().getData().getReceiptNo() + "";
-
+                                String timestamp_in = response.body().getData().getTimeIn() + "";
+                                String timestamp_out = response.body().getData().getTimeOut() + "";
+                                String amount = response.body().getData().getAmount() + "";
+//
 
                                 RecordHistoryCarOutData(user_id, user_name, user_no_record, user_address, name_posid, name_taxid, cartype_name, path_image, name_guardhouse_out,
                                         receipt_no, date_in, date_out, tag_id_card, recordin_no, license, promotion_id, price, losscard, discount, hours, minute, isMember, member_cash_balance, member_decreaseCashOrHour, member_pro_minute_balance_use, overdate);
@@ -844,11 +866,25 @@ public class OutCarMainActivity  extends ImportantMethod implements View.OnClick
 
                                     showToastLog(TAG, "status_radio_carout_print_all");
 
+                                    PrintOUT(name_companyname, name_mac_address_print, name_posid, name_taxid, tag_id_card,
+                                            timestamp_in, timestamp_out, license, price, receipt_no,hours,minute);
+
 
                                 } else if (status_radio_carout_print_price_only == true) {
                                     //TODO Print Car OUT
 
-                                    showToastLog(TAG, "status_radio_carout_print_price_only");
+                                    if(amount.equals("0")){
+
+                                        showToastLog(TAG, "status_radio_carout_print_price_only");
+
+                                    }else{
+
+                                        PrintOUT(name_companyname, name_mac_address_print, name_posid, name_taxid, tag_id_card,
+                                                timestamp_in, timestamp_out, license, price, receipt_no,hours,minute);
+
+                                    }
+
+
 
 
                                 }
@@ -869,9 +905,6 @@ public class OutCarMainActivity  extends ImportantMethod implements View.OnClick
                                 }, 500);
 
 
-
-
-
                                 //TODO Print Car OUT
 
                             } else {
@@ -890,9 +923,6 @@ public class OutCarMainActivity  extends ImportantMethod implements View.OnClick
 
                                     }
                                 }, 500);
-
-
-
 
 
                             }
@@ -963,4 +993,139 @@ public class OutCarMainActivity  extends ImportantMethod implements View.OnClick
     }
 
 
+    private void PrintOUT(
+            String companyname, String printerMacAddress, String name_posid, String name_taxid,
+            String cardCardId, String description_time_in, String description_time_out,
+            String license_plate, String amount, String receipt , String hours, String  minutes
+    ) {
+
+
+        //  VISITOR_OUT_CONTENT
+
+
+        final BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+
+        final UUID PRINTER_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
+
+
+        BluetoothDevice bluetoothDevice = null;
+        BluetoothSocket bluetoothSocket = null;
+
+
+        try {
+
+            //region    CHECK_BLUETOOTH_COMPATIBLE_AND_PERMISSION
+            if (bluetoothAdapter == null) {
+
+
+                showToastWarning("Device does not support Bluetooth", this);
+
+            }
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+
+                   // showToastWarning("Bluetooth connect Permission required", this);
+
+                }
+            }
+            if (!bluetoothAdapter.isEnabled()) {
+
+                showToastWarning("Bluetooth is turned off", this);
+
+            }
+            if (!BluetoothAdapter.checkBluetoothAddress(printerMacAddress)) {
+
+                showToastWarning("Invalid bluetooth address", this);
+
+            }
+            //endregion CHECK_BLUETOOTH_COMPATIBLE_AND_PERMISSION
+
+
+            bluetoothDevice = bluetoothAdapter.getRemoteDevice(printerMacAddress);
+            bluetoothSocket = bluetoothDevice.createRfcommSocketToServiceRecord(PRINTER_UUID);
+
+            bluetoothSocket.connect();
+            InputStream inputStream = bluetoothSocket.getInputStream();
+            OutputStream outputStream = bluetoothSocket.getOutputStream();
+
+
+            //region    SET_ALIGNMENT_TO_LEFT
+
+
+            outputStream.write(MiniThermal80MMv4.Command.ESC_Init);
+            outputStream.write(MiniThermal80MMv4.Command.LF);
+            MiniThermal80MMv4.Command.ESC_Align[2] = 0x01;
+            outputStream.write(MiniThermal80MMv4.Command.ESC_Align);
+            outputStream.write(MiniThermal80MMv4.PrinterCommand.POS_Print_Text(companyname, "TIS-620", 255, 1, 1, 1));
+            outputStream.write(MiniThermal80MMv4.Command.LF);
+            outputStream.write(MiniThermal80MMv4.Command.LF);
+            outputStream.write(MiniThermal80MMv4.PrinterCommand.POS_Print_Text("TAX INVOICE(ABB)", "TIS-620", 255, 0, 0, 0));
+            outputStream.write(MiniThermal80MMv4.Command.LF);
+            outputStream.write(MiniThermal80MMv4.PrinterCommand.POS_Print_Text("เลขประจำตัวเสียภาษี/TAX ID : " + name_taxid, "TIS-620", 255, 0, 0, 0));
+            outputStream.write(MiniThermal80MMv4.Command.LF);
+            outputStream.write(MiniThermal80MMv4.PrinterCommand.POS_Print_Text("ใบเสร็จรับเงิน/ใบกำกับภาษีอย่างย่อ", "TIS-620", 255, 0, 0, 0));
+            outputStream.write(MiniThermal80MMv4.Command.LF);
+            outputStream.write(MiniThermal80MMv4.PrinterCommand.POS_Print_Text("POS ID : " + name_posid, "TIS-620", 255, 0, 0, 0));
+            outputStream.write(MiniThermal80MMv4.Command.LF);
+            outputStream.write(MiniThermal80MMv4.Command.LF);
+            outputStream.write(MiniThermal80MMv4.PrinterCommand.POS_Print_Text("ค่าบริการที่จอดรถ (Mobile)", "TIS-620", 255, 0, 0, 0));
+            outputStream.write(MiniThermal80MMv4.Command.LF);
+            outputStream.write(MiniThermal80MMv4.PrinterCommand.POS_Print_Text("เลขที่/TAX INVOICE NO : " + receipt, "TIS-620", 255, 0, 0, 0));
+            outputStream.write(MiniThermal80MMv4.Command.LF);
+            outputStream.write(MiniThermal80MMv4.PrinterCommand.POS_Print_Text("----------------------------------------", "TIS-620", 255, 0, 0, 0));
+            outputStream.write(MiniThermal80MMv4.Command.LF);
+            outputStream.write(MiniThermal80MMv4.Command.LF);
+
+
+            MiniThermal80MMv4.Command.ESC_Align[2] = 0x00;
+            outputStream.write(MiniThermal80MMv4.Command.ESC_Align);
+            outputStream.write(MiniThermal80MMv4.PrinterCommand.POS_Print_Text("Code : " + cardCardId, "TIS-620", 255, 0, 0, 0));
+            outputStream.write(MiniThermal80MMv4.Command.LF);
+            outputStream.write(MiniThermal80MMv4.PrinterCommand.POS_Print_Text("ทะเบียนรถ/License : " + license_plate, "TIS-620", 255, 0, 0, 0));
+            outputStream.write(MiniThermal80MMv4.Command.LF);
+            outputStream.write(MiniThermal80MMv4.PrinterCommand.POS_Print_Text("เวลาเข้า/In : " + description_time_in, "TIS-620", 255, 0, 0, 0));
+            outputStream.write(MiniThermal80MMv4.Command.LF);
+            outputStream.write(MiniThermal80MMv4.PrinterCommand.POS_Print_Text("เวลาออก/Out : " + description_time_out, "TIS-620", 255, 0, 0, 0));
+            outputStream.write(MiniThermal80MMv4.Command.LF);
+            outputStream.write(MiniThermal80MMv4.PrinterCommand.POS_Print_Text("เวลาจอด : " + hours + " ชั่วโมง" +" " + minutes+" นาที", "TIS-620", 255, 0, 0, 0));
+            outputStream.write(MiniThermal80MMv4.Command.LF);
+            outputStream.write(MiniThermal80MMv4.PrinterCommand.POS_Print_Text("ค่าบริการ/Amount : " + amount + " บาท", "TIS-620", 255, 0, 0, 0));
+            outputStream.write(MiniThermal80MMv4.Command.LF);
+            outputStream.write(MiniThermal80MMv4.Command.LF);
+
+            MiniThermal80MMv4.Command.ESC_Align[2] = 0x01;
+            outputStream.write(MiniThermal80MMv4.Command.ESC_Align);
+            outputStream.write(MiniThermal80MMv4.PrinterCommand.POS_Print_Text("----------------------------------------", "TIS-620", 255, 0, 0, 0));
+            outputStream.write(MiniThermal80MMv4.Command.LF);
+            outputStream.write(MiniThermal80MMv4.Command.LF);
+            outputStream.write(MiniThermal80MMv4.PrinterCommand.POS_Print_Text("รวมภาษีมูลค่าเพิ่มแล้ว (VAT INCLUDED)", "TIS-620", 255, 0, 0, 0));
+            outputStream.write(MiniThermal80MMv4.Command.LF);
+            outputStream.write(MiniThermal80MMv4.PrinterCommand.POS_Print_Text("ขอบคุณที่ใช้บริการ/Thank you", "TIS-620", 255, 0, 0, 0));
+            outputStream.write(MiniThermal80MMv4.Command.LF);
+            outputStream.write(MiniThermal80MMv4.Command.LF);
+            outputStream.write(MiniThermal80MMv4.Command.LF);
+            outputStream.write(MiniThermal80MMv4.Command.LF);
+            outputStream.write(MiniThermal80MMv4.Command.LF);
+
+            outputStream.flush();
+            Thread.sleep(200);
+
+
+        } catch (Exception exception) {
+
+            showToastWarning("Exception thrown : " + exception.getMessage(), this);
+
+
+        } finally {
+            if (bluetoothSocket != null) {
+                try {
+                    bluetoothSocket.close();
+                } catch (Exception ignored) {
+
+                }
+            }
+        }
+
+
+    }
 }

@@ -139,7 +139,7 @@ public class HistoryCarInMainActivity  extends ImportantMethod {
                         // Do something
                         String companyname = name_company ;
                         String cardNoString = "Code : "+((History_data_carin_dao) adapter.getItem(position)).getTran_carin_card_id();
-                        String cardCardId = ((History_data_carin_dao) adapter.getItem(position)).getTran_carin_card_id();
+                        String recordno = ((History_data_carin_dao) adapter.getItem(position)).getTran_carin_recordno();
                         String description_time_in = "เวลาเข้า : "+((History_data_carin_dao) adapter.getItem(position)).getTran_carin_timestamp_carin();
                         String description_license_plate = "ทะเบียน : "+ ((History_data_carin_dao) adapter.getItem(position)).getTran_carin_license_plate();
                         String location =  "ตำแหน่งเข้า : "+ ((History_data_carin_dao) adapter.getItem(position)).getTran_carin_guardhouse_in();
@@ -147,7 +147,7 @@ public class HistoryCarInMainActivity  extends ImportantMethod {
                         dialog.dismiss();
 
 
-                        PrintIN(companyname,location,cardNoString,cardCardId,description_license_plate,description_time_in,description_type_car,name_mac_address_print);
+                        PrintIN(companyname,location,cardNoString,description_license_plate,description_time_in,description_type_car,name_mac_address_print,recordno);
 
 
 
@@ -241,7 +241,7 @@ public class HistoryCarInMainActivity  extends ImportantMethod {
 
 
 
-    private void PrintIN(String companyname,String location,String cardNoString,String cardCardId,String description_license_plate,String description_time_in,String description_type_car,String printerMacAddress) {
+    private void PrintIN(String companyname,String location,String cardNoString,String description_license_plate,String description_time_in,String description_type_car,String printerMacAddress,String recordno) {
 
 
         //  VISITOR_IN_CONTENT
@@ -250,7 +250,6 @@ public class HistoryCarInMainActivity  extends ImportantMethod {
 
 
         final BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-
         final UUID PRINTER_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
 
 
@@ -273,7 +272,7 @@ public class HistoryCarInMainActivity  extends ImportantMethod {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S){
                 if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
 
-                    showToastWarning("Bluetooth connect Permission required",this);
+                  //  showToastWarning("Bluetooth connect Permission required",this);
 
                 }
             }
@@ -325,18 +324,24 @@ public class HistoryCarInMainActivity  extends ImportantMethod {
             outputStream.write(MiniThermal80MMv4.PrinterCommand.POS_Print_Text(description_type_car, "TIS-620",255,0,0,0));
             outputStream.write(MiniThermal80MMv4.Command.LF);
             outputStream.write(MiniThermal80MMv4.Command.LF);
+            outputStream.write(MiniThermal80MMv4.Command.LF);
+            outputStream.write(MiniThermal80MMv4.Command.LF);
+            outputStream.write(MiniThermal80MMv4.Command.LF);
+            outputStream.write(MiniThermal80MMv4.Command.LF);
 
 
-            MiniThermal80MMv4.Command.ESC_Align[2] = 0x01;
-            outputStream.write(MiniThermal80MMv4.Command.ESC_Align);
-            byte[] manualStampIconData = MiniThermal80MMv4.PrinterCommand.getCodeBarCommand(cardCardId, 73, 2, 100, 1, 2);
-            outputStream.write(manualStampIconData);
-            outputStream.write(MiniThermal80MMv4.Command.LF);
-            outputStream.write(MiniThermal80MMv4.Command.LF);
-            outputStream.write(MiniThermal80MMv4.Command.LF);
-            outputStream.write(MiniThermal80MMv4.Command.LF);
-            outputStream.write(MiniThermal80MMv4.Command.LF);
-            outputStream.write(MiniThermal80MMv4.Command.LF);
+//            MiniThermal80MMv4.Command.ESC_Align[2] = 0x01;
+//            outputStream.write(MiniThermal80MMv4.Command.ESC_Align);
+//            byte[] manualStampIconData = MiniThermal80MMv4.PrinterCommand.getCodeBarCommand(recordno, 73, 2, 100, 1, 2);
+//            outputStream.write(manualStampIconData);
+//            outputStream.write(MiniThermal80MMv4.Command.LF);
+//            outputStream.write(MiniThermal80MMv4.Command.LF);
+//            outputStream.write(MiniThermal80MMv4.Command.LF);
+//            outputStream.write(MiniThermal80MMv4.Command.LF);
+//            outputStream.write(MiniThermal80MMv4.Command.LF);
+//            outputStream.write(MiniThermal80MMv4.Command.LF);
+
+
             outputStream.flush();
             Thread.sleep(200);
 
@@ -361,6 +366,7 @@ public class HistoryCarInMainActivity  extends ImportantMethod {
 
 
     }
+
 
 
     private void loadPreferences() {

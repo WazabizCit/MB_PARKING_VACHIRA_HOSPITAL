@@ -52,6 +52,7 @@ public class DataHistoryCarInDao {
             dao.setTran_carin_path_img(cursor.getString(11));
             dao.setTran_carin_cartype_name(cursor.getString(12));
             dao.setTran_carin_user_name(cursor.getString(13));
+            dao.setTran_carin_recordno(cursor.getString(14));
 
 
 
@@ -80,6 +81,8 @@ public class DataHistoryCarInDao {
         values.put("tran_carin_path_img", list.getTran_carin_path_img());
         values.put("tran_carin_cartype_name", list.getTran_carin_cartype_name());
         values.put("tran_carin_user_name", list.getTran_carin_user_name());
+        values.put("tran_carin_recordno", list.getTran_carin_recordno());
+
 
 
 

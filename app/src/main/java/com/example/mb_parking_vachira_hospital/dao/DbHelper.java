@@ -34,6 +34,7 @@ public class DbHelper extends SQLiteOpenHelper {
             + "tran_carin_path_img TEXT  DEFAULT '',"
             + "tran_carin_cartype_name TEXT  DEFAULT '',"
             + "tran_carin_user_name TEXT  DEFAULT '',"
+            + "tran_carin_recordno TEXT  DEFAULT '',"
             + "m_create_date TEXT  DEFAULT  (datetime('now','localtime')),"
             + "m_delete_flag TEXT  DEFAULT 'N'"
             + ");";

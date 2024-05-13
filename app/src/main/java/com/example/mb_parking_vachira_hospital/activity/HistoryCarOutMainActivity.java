@@ -151,9 +151,11 @@ public class HistoryCarOutMainActivity  extends ImportantMethod {
                         String license_plate = ((History_data_carout_dao) adapter.getItem(position)).getTran_carout_license();
                         String price = ((History_data_carout_dao) adapter.getItem(position)).getTran_carout_price();
                         String receipt = ((History_data_carout_dao) adapter.getItem(position)).getTran_carout_receipt();
+                        String minute = ((History_data_carout_dao) adapter.getItem(position)).getTran_carout_minute();
+                        String hours = ((History_data_carout_dao) adapter.getItem(position)).getTran_carout_hours();
                         dialog.dismiss();
 
-                        PrintOUT(name_company,name_mac_address_print,name_posid,name_taxid,id_card,timestamp_in,timestamp_out,license_plate,price,receipt);
+                        PrintOUT(name_company,name_mac_address_print,name_posid,name_taxid,id_card,timestamp_in,timestamp_out,license_plate,price,receipt,hours,minute);
                     }
                 });
                 AlertDialog dialog = builder.create();
@@ -248,18 +250,17 @@ public class HistoryCarOutMainActivity  extends ImportantMethod {
 
 
 
+
+
+
     private void PrintOUT(
-            String companyname,String printerMacAddress,String name_posid,String name_taxid ,
-            String cardCardId,String description_time_in,String description_time_out,
-            String license_plate, String amount ,String receipt
-     ) {
-
-
+            String companyname, String printerMacAddress, String name_posid, String name_taxid,
+            String cardCardId, String description_time_in, String description_time_out,
+            String license_plate, String amount, String receipt , String hours, String  minutes
+    ) {
 
 
         //  VISITOR_OUT_CONTENT
-
-
 
 
         final BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
@@ -267,49 +268,44 @@ public class HistoryCarOutMainActivity  extends ImportantMethod {
         final UUID PRINTER_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
 
 
-
         BluetoothDevice bluetoothDevice = null;
         BluetoothSocket bluetoothSocket = null;
-
 
 
         try {
 
             //region    CHECK_BLUETOOTH_COMPATIBLE_AND_PERMISSION
-            if(bluetoothAdapter == null){
+            if (bluetoothAdapter == null) {
 
 
-
-                showToastWarning("Device does not support Bluetooth",this);
+                showToastWarning("Device does not support Bluetooth", this);
 
             }
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S){
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                 if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
 
-                    showToastWarning("Bluetooth connect Permission required",this);
+                    // showToastWarning("Bluetooth connect Permission required", this);
 
                 }
             }
-            if (!bluetoothAdapter.isEnabled()){
+            if (!bluetoothAdapter.isEnabled()) {
 
-                showToastWarning("Bluetooth is turned off",this);
+                showToastWarning("Bluetooth is turned off", this);
 
             }
-            if(!BluetoothAdapter.checkBluetoothAddress(printerMacAddress)){
+            if (!BluetoothAdapter.checkBluetoothAddress(printerMacAddress)) {
 
-                showToastWarning("Invalid bluetooth address",this);
+                showToastWarning("Invalid bluetooth address", this);
 
             }
             //endregion CHECK_BLUETOOTH_COMPATIBLE_AND_PERMISSION
-
-
 
 
             bluetoothDevice = bluetoothAdapter.getRemoteDevice(printerMacAddress);
             bluetoothSocket = bluetoothDevice.createRfcommSocketToServiceRecord(PRINTER_UUID);
 
             bluetoothSocket.connect();
-            InputStream inputStream   = bluetoothSocket.getInputStream();
+            InputStream inputStream = bluetoothSocket.getInputStream();
             OutputStream outputStream = bluetoothSocket.getOutputStream();
 
 
@@ -320,50 +316,51 @@ public class HistoryCarOutMainActivity  extends ImportantMethod {
             outputStream.write(MiniThermal80MMv4.Command.LF);
             MiniThermal80MMv4.Command.ESC_Align[2] = 0x01;
             outputStream.write(MiniThermal80MMv4.Command.ESC_Align);
-            outputStream.write(MiniThermal80MMv4.PrinterCommand.POS_Print_Text(companyname, "TIS-620",255,1,1,1));
+            outputStream.write(MiniThermal80MMv4.PrinterCommand.POS_Print_Text(companyname, "TIS-620", 255, 1, 1, 1));
             outputStream.write(MiniThermal80MMv4.Command.LF);
             outputStream.write(MiniThermal80MMv4.Command.LF);
-            outputStream.write(MiniThermal80MMv4.PrinterCommand.POS_Print_Text("TAX INVOICE(ABB)", "TIS-620",255,0,0,0));
+            outputStream.write(MiniThermal80MMv4.PrinterCommand.POS_Print_Text("TAX INVOICE(ABB)", "TIS-620", 255, 0, 0, 0));
             outputStream.write(MiniThermal80MMv4.Command.LF);
-            outputStream.write(MiniThermal80MMv4.PrinterCommand.POS_Print_Text("เลขประจำตัวเสียภาษี/TAX ID : "+name_taxid, "TIS-620",255,0,0,0));
+            outputStream.write(MiniThermal80MMv4.PrinterCommand.POS_Print_Text("เลขประจำตัวเสียภาษี/TAX ID : " + name_taxid, "TIS-620", 255, 0, 0, 0));
             outputStream.write(MiniThermal80MMv4.Command.LF);
-            outputStream.write(MiniThermal80MMv4.PrinterCommand.POS_Print_Text("ใบเสร็จรับเงิน/ใบกำกับภาษีอย่างย่อ", "TIS-620",255,0,0,0));
+            outputStream.write(MiniThermal80MMv4.PrinterCommand.POS_Print_Text("ใบเสร็จรับเงิน/ใบกำกับภาษีอย่างย่อ", "TIS-620", 255, 0, 0, 0));
             outputStream.write(MiniThermal80MMv4.Command.LF);
-            outputStream.write(MiniThermal80MMv4.PrinterCommand.POS_Print_Text("POS ID : "+name_posid, "TIS-620",255,0,0,0));
-            outputStream.write(MiniThermal80MMv4.Command.LF);
-            outputStream.write(MiniThermal80MMv4.Command.LF);
-            outputStream.write(MiniThermal80MMv4.PrinterCommand.POS_Print_Text("ค่าบริการที่จอดรถ (Mobile)", "TIS-620",255,0,0,0));
-            outputStream.write(MiniThermal80MMv4.Command.LF);
-            outputStream.write(MiniThermal80MMv4.PrinterCommand.POS_Print_Text("เลขที่/TAX INVOICE NO : "+receipt, "TIS-620",255,0,0,0));
-            outputStream.write(MiniThermal80MMv4.Command.LF);
-            outputStream.write(MiniThermal80MMv4.PrinterCommand.POS_Print_Text("----------------------------------------", "TIS-620",255,0,0,0));
+            outputStream.write(MiniThermal80MMv4.PrinterCommand.POS_Print_Text("POS ID : " + name_posid, "TIS-620", 255, 0, 0, 0));
             outputStream.write(MiniThermal80MMv4.Command.LF);
             outputStream.write(MiniThermal80MMv4.Command.LF);
-
+            outputStream.write(MiniThermal80MMv4.PrinterCommand.POS_Print_Text("ค่าบริการที่จอดรถ (Mobile)", "TIS-620", 255, 0, 0, 0));
+            outputStream.write(MiniThermal80MMv4.Command.LF);
+            outputStream.write(MiniThermal80MMv4.PrinterCommand.POS_Print_Text("เลขที่/TAX INVOICE NO : " + receipt, "TIS-620", 255, 0, 0, 0));
+            outputStream.write(MiniThermal80MMv4.Command.LF);
+            outputStream.write(MiniThermal80MMv4.PrinterCommand.POS_Print_Text("----------------------------------------", "TIS-620", 255, 0, 0, 0));
+            outputStream.write(MiniThermal80MMv4.Command.LF);
+            outputStream.write(MiniThermal80MMv4.Command.LF);
 
 
             MiniThermal80MMv4.Command.ESC_Align[2] = 0x00;
             outputStream.write(MiniThermal80MMv4.Command.ESC_Align);
-            outputStream.write(MiniThermal80MMv4.PrinterCommand.POS_Print_Text("Code : "+cardCardId, "TIS-620",255,0,0,0));
+            outputStream.write(MiniThermal80MMv4.PrinterCommand.POS_Print_Text("Code : " + cardCardId, "TIS-620", 255, 0, 0, 0));
             outputStream.write(MiniThermal80MMv4.Command.LF);
-            outputStream.write(MiniThermal80MMv4.PrinterCommand.POS_Print_Text("ทะเบียนรถ/License : "+license_plate, "TIS-620",255,0,0,0));
+            outputStream.write(MiniThermal80MMv4.PrinterCommand.POS_Print_Text("ทะเบียนรถ/License : " + license_plate, "TIS-620", 255, 0, 0, 0));
             outputStream.write(MiniThermal80MMv4.Command.LF);
-            outputStream.write(MiniThermal80MMv4.PrinterCommand.POS_Print_Text("เวลาเข้า/In : "+description_time_in, "TIS-620",255,0,0,0));
+            outputStream.write(MiniThermal80MMv4.PrinterCommand.POS_Print_Text("เวลาเข้า/In : " + description_time_in, "TIS-620", 255, 0, 0, 0));
             outputStream.write(MiniThermal80MMv4.Command.LF);
-            outputStream.write(MiniThermal80MMv4.PrinterCommand.POS_Print_Text("เวลาออก/Out : "+description_time_out, "TIS-620",255,0,0,0));
+            outputStream.write(MiniThermal80MMv4.PrinterCommand.POS_Print_Text("เวลาออก/Out : " + description_time_out, "TIS-620", 255, 0, 0, 0));
             outputStream.write(MiniThermal80MMv4.Command.LF);
-            outputStream.write(MiniThermal80MMv4.PrinterCommand.POS_Print_Text("ค่าบริการ/Amount : "+amount +" บาท", "TIS-620",255,0,0,0));
+            outputStream.write(MiniThermal80MMv4.PrinterCommand.POS_Print_Text("เวลาจอด : " + hours + " ชั่วโมง" +" " + minutes+" นาที", "TIS-620", 255, 0, 0, 0));
+            outputStream.write(MiniThermal80MMv4.Command.LF);
+            outputStream.write(MiniThermal80MMv4.PrinterCommand.POS_Print_Text("ค่าบริการ/Amount : " + amount + " บาท", "TIS-620", 255, 0, 0, 0));
             outputStream.write(MiniThermal80MMv4.Command.LF);
             outputStream.write(MiniThermal80MMv4.Command.LF);
 
             MiniThermal80MMv4.Command.ESC_Align[2] = 0x01;
             outputStream.write(MiniThermal80MMv4.Command.ESC_Align);
-            outputStream.write(MiniThermal80MMv4.PrinterCommand.POS_Print_Text("----------------------------------------", "TIS-620",255,0,0,0));
+            outputStream.write(MiniThermal80MMv4.PrinterCommand.POS_Print_Text("----------------------------------------", "TIS-620", 255, 0, 0, 0));
             outputStream.write(MiniThermal80MMv4.Command.LF);
             outputStream.write(MiniThermal80MMv4.Command.LF);
-            outputStream.write(MiniThermal80MMv4.PrinterCommand.POS_Print_Text("รวมภาษีมูลค่าเพิ่มแล้ว (VAT INCLUDED)", "TIS-620",255,0,0,0));
+            outputStream.write(MiniThermal80MMv4.PrinterCommand.POS_Print_Text("รวมภาษีมูลค่าเพิ่มแล้ว (VAT INCLUDED)", "TIS-620", 255, 0, 0, 0));
             outputStream.write(MiniThermal80MMv4.Command.LF);
-            outputStream.write(MiniThermal80MMv4.PrinterCommand.POS_Print_Text("ขอบคุณที่ใช้บริการ/Thank you", "TIS-620",255,0,0,0));
+            outputStream.write(MiniThermal80MMv4.PrinterCommand.POS_Print_Text("ขอบคุณที่ใช้บริการ/Thank you", "TIS-620", 255, 0, 0, 0));
             outputStream.write(MiniThermal80MMv4.Command.LF);
             outputStream.write(MiniThermal80MMv4.Command.LF);
             outputStream.write(MiniThermal80MMv4.Command.LF);
@@ -374,23 +371,20 @@ public class HistoryCarOutMainActivity  extends ImportantMethod {
             Thread.sleep(200);
 
 
+        } catch (Exception exception) {
+
+            showToastWarning("Exception thrown : " + exception.getMessage(), this);
 
 
-        }catch (Exception exception){
-
-            showToastWarning("Exception thrown : " + exception.getMessage(),this);
-
-
-        }finally {
-            if(bluetoothSocket != null){
+        } finally {
+            if (bluetoothSocket != null) {
                 try {
                     bluetoothSocket.close();
-                }catch (Exception ignored){
+                } catch (Exception ignored) {
 
                 }
             }
         }
-
 
 
     }

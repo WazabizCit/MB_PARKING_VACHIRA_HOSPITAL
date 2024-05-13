@@ -24,6 +24,9 @@ public class Sub_data_action_save_in {
     @SerializedName("datetime_in")
     @Expose
     private String datetimeIn;
+    @SerializedName("record_no")
+    @Expose
+    private Integer recordNo;
 
     public String getCardid() {
         return cardid;
@@ -71,5 +74,13 @@ public class Sub_data_action_save_in {
 
     public void setDatetimeIn(String datetimeIn) {
         this.datetimeIn = datetimeIn;
+    }
+
+    public Integer getRecordNo() {
+        return recordNo;
+    }
+
+    public void setRecordNo(Integer recordNo) {
+        this.recordNo = recordNo;
     }
 }

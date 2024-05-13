@@ -48,6 +48,7 @@ public class LoginMainActivity extends ImportantMethod implements View.OnClickLi
     private static final String PREF_PORT = "pref_port";
     private static final String PREF_GATE = "pref_gate";
     private static final String PREF_GUARDHOUSE = "pref_guardhouse";
+    private static final String PREF_COMPANYNAME = "pref_companyname";
 
     ///////////////////////////////////////////////
 
@@ -76,6 +77,7 @@ public class LoginMainActivity extends ImportantMethod implements View.OnClickLi
     private String port;
     private String name_gate;
     private String name_guardhouse;
+    private String name_companyname;
 
 
     private ProgressDialog progressDoalog;
@@ -84,6 +86,7 @@ public class LoginMainActivity extends ImportantMethod implements View.OnClickLi
     EditText edit_password;
     Button btn_login;
     TextView txt_admin_setting;
+    TextView textView_namecompany;
 
 
 
@@ -106,6 +109,7 @@ public class LoginMainActivity extends ImportantMethod implements View.OnClickLi
         edit_password = findViewById(R.id.edit_password);
         btn_login = findViewById(R.id.btn_login);
         txt_admin_setting = findViewById(R.id.txt_admin_setting);
+        textView_namecompany  = findViewById(R.id.textView_namecompany);
 
 
         btn_login.setOnClickListener(this);
@@ -118,6 +122,7 @@ public class LoginMainActivity extends ImportantMethod implements View.OnClickLi
 
         edit_username.setText("2222");
         edit_password.setText("2222");
+        textView_namecompany.setText(name_companyname+"");
 
 
     }
@@ -283,6 +288,7 @@ public class LoginMainActivity extends ImportantMethod implements View.OnClickLi
         port = settings.getString(PREF_PORT, DefaultString);
         name_gate = settings.getString(PREF_GATE, DefaultString);
         name_guardhouse = settings.getString(PREF_GUARDHOUSE, DefaultString);
+        name_companyname =  settings.getString(PREF_COMPANYNAME, DefaultString);
 
     }
 

@@ -673,9 +673,11 @@ public class InCarMainActivity extends ImportantMethod implements View.OnClickLi
                                 String str_cartype = response.body().getData().getStrCartype() + "";
                                 String str_cashiername = response.body().getData().getStrCashiername() + "";
                                 String datetime_in = response.body().getData().getDatetimeIn() + "";
+                                String recordno = response.body().getData().getRecordNo() + "";
 
 
-                                RecordHistoryCarInData(cardid, license_plate, cartype_id, user_id, user_no_record, user_address, name_posid, name_taxid, datetime_in, name_guardhouse_in, path_image, str_cartype, str_cashiername);
+
+                                RecordHistoryCarInData(cardid, license_plate, cartype_id, user_id, user_no_record, user_address, name_posid, name_taxid, datetime_in, name_guardhouse_in, path_image, str_cartype, str_cashiername,recordno);
 
                                 if (status_radio_carin_not_print == true) {
 
@@ -689,15 +691,15 @@ public class InCarMainActivity extends ImportantMethod implements View.OnClickLi
 
 
                                     String companyname = name_company  ;
-                                    String location = "ตำแหน่งเข้า : xxxxx"  ;
-                                    String cardNoString = "Code : 1234"  ;
-                                    String cardCardId = "Code : 1234"  ;
-                                    String description_license_plate = "ทะเบียน : รถยนต์";
-                                    String description_time_in = "เวลาเข้า : 1234";
-                                    String description_type_car = "ประภท : xxxx";
+                                    String location = "ตำแหน่งเข้า : "+ name_guardhouse_in  ;
+                                    String cardNoString = "Code : "+ cardid ;
+                                    String description_license_plate = "ทะเบียน : "+license_plate;
+                                    String description_time_in = "เวลาเข้า : "+datetime_in;
+                                    String description_type_car = "ประภท : "+str_cartype;
 
 
-                                    PrintIN(companyname,location,cardNoString,cardCardId,description_license_plate,description_time_in,description_type_car,name_mac_address_print);
+
+                                    PrintIN(companyname,location,cardNoString,description_license_plate,description_time_in,description_type_car,name_mac_address_print,recordno);
 
 
 
@@ -827,7 +829,8 @@ public class InCarMainActivity extends ImportantMethod implements View.OnClickLi
                                         String tran_carin_guardhouse_in,
                                         String tran_carin_path_img,
                                         String tran_carin_cartype_name,
-                                        String tran_carin_user_name
+                                        String tran_carin_user_name,
+                                        String tran_carin_recordno
     ) {
 
 
@@ -845,6 +848,7 @@ public class InCarMainActivity extends ImportantMethod implements View.OnClickLi
         list.setTran_carin_path_img(tran_carin_path_img);
         list.setTran_carin_cartype_name(tran_carin_cartype_name);
         list.setTran_carin_user_name(tran_carin_user_name);
+        list.setTran_carin_recordno(tran_carin_recordno);
 
         DataHistoryCarInDao dao = new DataHistoryCarInDao(getApplicationContext());
         dao.open();
@@ -854,7 +858,7 @@ public class InCarMainActivity extends ImportantMethod implements View.OnClickLi
 
     }
 
-    private void PrintIN(String companyname,String location,String cardNoString,String cardCardId,String description_license_plate,String description_time_in,String description_type_car,String printerMacAddress) {
+    private void PrintIN(String companyname,String location,String cardNoString,String description_license_plate,String description_time_in,String description_type_car,String printerMacAddress,String recordno) {
 
 
         //  VISITOR_IN_CONTENT
@@ -885,10 +889,11 @@ public class InCarMainActivity extends ImportantMethod implements View.OnClickLi
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S){
                 if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
 
-                    showToastWarning("Bluetooth connect Permission required",this);
+                  //  showToastWarning("Bluetooth connect Permission required",this);
 
                 }
             }
+
             if (!bluetoothAdapter.isEnabled()){
 
                 showToastWarning("Bluetooth is turned off",this);
@@ -937,18 +942,24 @@ public class InCarMainActivity extends ImportantMethod implements View.OnClickLi
             outputStream.write(MiniThermal80MMv4.PrinterCommand.POS_Print_Text(description_type_car, "TIS-620",255,0,0,0));
             outputStream.write(MiniThermal80MMv4.Command.LF);
             outputStream.write(MiniThermal80MMv4.Command.LF);
+            outputStream.write(MiniThermal80MMv4.Command.LF);
+            outputStream.write(MiniThermal80MMv4.Command.LF);
+            outputStream.write(MiniThermal80MMv4.Command.LF);
+            outputStream.write(MiniThermal80MMv4.Command.LF);
 
 
-            MiniThermal80MMv4.Command.ESC_Align[2] = 0x01;
-            outputStream.write(MiniThermal80MMv4.Command.ESC_Align);
-            byte[] manualStampIconData = MiniThermal80MMv4.PrinterCommand.getCodeBarCommand(cardCardId, 73, 2, 100, 1, 2);
-            outputStream.write(manualStampIconData);
-            outputStream.write(MiniThermal80MMv4.Command.LF);
-            outputStream.write(MiniThermal80MMv4.Command.LF);
-            outputStream.write(MiniThermal80MMv4.Command.LF);
-            outputStream.write(MiniThermal80MMv4.Command.LF);
-            outputStream.write(MiniThermal80MMv4.Command.LF);
-            outputStream.write(MiniThermal80MMv4.Command.LF);
+//            MiniThermal80MMv4.Command.ESC_Align[2] = 0x01;
+//            outputStream.write(MiniThermal80MMv4.Command.ESC_Align);
+//            byte[] manualStampIconData = MiniThermal80MMv4.PrinterCommand.getCodeBarCommand(recordno, 73, 2, 100, 1, 2);
+//            outputStream.write(manualStampIconData);
+//            outputStream.write(MiniThermal80MMv4.Command.LF);
+//            outputStream.write(MiniThermal80MMv4.Command.LF);
+//            outputStream.write(MiniThermal80MMv4.Command.LF);
+//            outputStream.write(MiniThermal80MMv4.Command.LF);
+//            outputStream.write(MiniThermal80MMv4.Command.LF);
+//            outputStream.write(MiniThermal80MMv4.Command.LF);
+
+
             outputStream.flush();
             Thread.sleep(200);
 

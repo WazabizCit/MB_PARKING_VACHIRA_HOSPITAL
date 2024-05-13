@@ -21,6 +21,15 @@ public class History_data_carin_dao {
     String tran_carin_guardhouse_in;
     String tran_carin_path_img;
     String tran_carin_cartype_name;
+    String tran_carin_recordno;
+
+    public String getTran_carin_recordno() {
+        return tran_carin_recordno;
+    }
+
+    public void setTran_carin_recordno(String tran_carin_recordno) {
+        this.tran_carin_recordno = tran_carin_recordno;
+    }
 
     public String getTran_carin_user_name() {
         return tran_carin_user_name;
