@@ -14,12 +14,12 @@ tools:showIn="navigation_view">
 
     </item>
 
-    <item
-        android:id="@+id/item_history_in"
-        android:title="ประวัติขาเข้า"
-        android:icon="@drawable/ic_car_in">
+<!--    <item-->
+<!--        android:id="@+id/item_history_in"-->
+<!--        android:title="ประวัติขาเข้า"-->
+<!--        android:icon="@drawable/ic_car_in"> -->
 
-    </item>
+<!--    </item>-->
 
 
     <item

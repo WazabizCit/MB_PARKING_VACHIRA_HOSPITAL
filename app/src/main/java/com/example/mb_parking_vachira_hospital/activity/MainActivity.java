@@ -134,11 +134,11 @@ public class MainActivity extends ImportantMethod implements NavigationView.OnNa
                 break;
 
 
-            case R.id.item_history_in:
-                Intent history_in = new Intent(MainActivity.this, HistoryCarInMainActivity.class);
-                startActivity(history_in);
-                finish();
-                break;
+//            case R.id.item_history_in:
+//                Intent history_in = new Intent(MainActivity.this, HistoryCarInMainActivity.class);
+//                startActivity(history_in);
+//                finish();
+//                break;
 
 
             case R.id.item_history_out:

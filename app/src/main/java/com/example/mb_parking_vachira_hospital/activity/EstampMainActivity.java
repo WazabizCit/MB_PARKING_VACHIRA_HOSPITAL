@@ -517,6 +517,9 @@ public class EstampMainActivity extends ImportantMethod implements View.OnClickL
                     SendData.put("level",   user_level);
                     SendData.put("user_name", user_name);
 
+                    String promotion_id_1 =  edit_insert_promotion.getText()+"";
+                    String promotion_name_1 =  "";
+
 
                     Call<Result_action_mobile_save_promotion> call = HttpManager.getInstance(ip_address, port).getService().action_mobile_save_promotion(SendData);
                     call.enqueue(new Callback<Result_action_mobile_save_promotion>() {
@@ -532,7 +535,7 @@ public class EstampMainActivity extends ImportantMethod implements View.OnClickL
                                         public void run() {
                                             progressDoalog.dismiss();
                                             showToastSuccess("บันทึกสำเร็จ", getApplicationContext());
-                                            RecordHistoryEstampData(tag_id_card, promotion_id, promotion_name, user_id, user_no_record, user_name);
+                                            RecordHistoryEstampData(tag_id_card, promotion_id_1, promotion_name_1, user_id, user_no_record, user_name);
 
                                             edit_detail_promotion_card.setText("");
                                             edit_id_card.setText("");
