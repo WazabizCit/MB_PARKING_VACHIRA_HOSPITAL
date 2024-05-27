@@ -7,6 +7,7 @@ import com.example.mb_parking_vachira_hospital.model.Result_action_mobile_get_me
 import com.example.mb_parking_vachira_hospital.model.Result_action_mobile_get_promotion;
 import com.example.mb_parking_vachira_hospital.model.Result_action_mobile_get_visitorcartype;
 import com.example.mb_parking_vachira_hospital.model.Result_action_mobile_login;
+import com.example.mb_parking_vachira_hospital.model.Result_action_mobile_logout;
 import com.example.mb_parking_vachira_hospital.model.Result_action_mobile_save_promotion;
 import com.example.mb_parking_vachira_hospital.model.Result_action_save_in;
 import com.example.mb_parking_vachira_hospital.model.Result_action_save_out;
@@ -128,6 +129,13 @@ public interface ApiService {
     @Headers({"token:33629f7a-03b5-11eb-adc1-0242ac120002", "Content-Type: application/json"})
     @POST("api/SaveEstamp/promotion")
     Call<Result_action_mobile_save_promotion> action_mobile_save_promotion(@Body HashMap<String, String> fields);
+
+
+    //////////////////////// LOGOUT ////////////////////////////////
+
+    @Headers({"token:33629f7a-03b5-11eb-adc1-0242ac120002", "Content-Type: application/json"})
+    @POST("api/Login/UserLogoutRecord")
+    Call<Result_action_mobile_logout> action_mobile_logout(@Body HashMap<String, String> fields);
 
 
 }

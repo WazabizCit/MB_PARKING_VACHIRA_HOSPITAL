@@ -21,6 +21,7 @@
         <entry key="..\:/Users/MzWazabi/AndroidStudioProjects/MB_PARKING_VACHIRA_HOSPITAL/app/src/main/res/layout/activity_estamp_main.xml" value="0.2359375" />
         <entry key="..\:/Users/MzWazabi/AndroidStudioProjects/MB_PARKING_VACHIRA_HOSPITAL/app/src/main/res/layout/activity_history_car_in_main.xml" value="0.2359375" />
         <entry key="..\:/Users/MzWazabi/AndroidStudioProjects/MB_PARKING_VACHIRA_HOSPITAL/app/src/main/res/layout/activity_history_car_out_main.xml" value="0.2359375" />
+        <entry key="..\:/Users/MzWazabi/AndroidStudioProjects/MB_PARKING_VACHIRA_HOSPITAL/app/src/main/res/layout/activity_history_cut_shift_main.xml" value="0.23333333333333334" />
         <entry key="..\:/Users/MzWazabi/AndroidStudioProjects/MB_PARKING_VACHIRA_HOSPITAL/app/src/main/res/layout/activity_history_estamp_main.xml" value="0.17980072463768115" />
         <entry key="..\:/Users/MzWazabi/AndroidStudioProjects/MB_PARKING_VACHIRA_HOSPITAL/app/src/main/res/layout/activity_in_car_main.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/MzWazabi/AndroidStudioProjects/MB_PARKING_VACHIRA_HOSPITAL/app/src/main/res/layout/activity_login_main.xml" value="0.36666666666666664" />
@@ -38,6 +39,7 @@
         <entry key="..\:/Users/MzWazabi/AndroidStudioProjects/MB_PARKING_VACHIRA_HOSPITAL/app/src/main/res/layout/custom_toast.xml" value="0.25" />
         <entry key="..\:/Users/MzWazabi/AndroidStudioProjects/MB_PARKING_VACHIRA_HOSPITAL/app/src/main/res/layout/list_data_history_carin.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/MzWazabi/AndroidStudioProjects/MB_PARKING_VACHIRA_HOSPITAL/app/src/main/res/layout/list_data_history_carout.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/MzWazabi/AndroidStudioProjects/MB_PARKING_VACHIRA_HOSPITAL/app/src/main/res/layout/list_data_history_cutshift.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/MzWazabi/AndroidStudioProjects/MB_PARKING_VACHIRA_HOSPITAL/app/src/main/res/layout/list_data_history_estamp.xml" value="0.27395833333333336" />
         <entry key="..\:/Users/MzWazabi/AndroidStudioProjects/MB_PARKING_VACHIRA_HOSPITAL/app/src/main/res/layout/nav_header.xml" value="0.18802083333333333" />
         <entry key="..\:/Users/MzWazabi/AndroidStudioProjects/MB_PARKING_VACHIRA_HOSPITAL/app/src/main/res/layout/toast.xml" value="0.24635416666666668" />

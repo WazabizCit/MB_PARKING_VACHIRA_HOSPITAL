@@ -9,7 +9,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class DbHelper extends SQLiteOpenHelper {
 
-    private static final String databaseName = "ValetPark.Sqlite";
+    private static final String databaseName = "ParkingDB.Sqlite";
     private static final int databaseVerSion = 1;
     Context mContect;
 
@@ -90,6 +90,19 @@ public class DbHelper extends SQLiteOpenHelper {
 
 
 
+    private static final String tableDataHistoryCutShiftCreateSQL = "CREATE TABLE tran_history_cutshift("
+            + "tran_cutshift_id INTEGER PRIMARY KEY AUTOINCREMENT,"
+            + "tran_cutshift_user_name TEXT DEFAULT '',"
+            + "tran_cutshift_date_start TEXT DEFAULT '',"
+            + "tran_cutshift_date_end TEXT DEFAULT '',"
+            + "tran_cutshift_price TEXT DEFAULT '',"
+            + "tran_cutshift_discount TEXT DEFAULT '',"
+            + "m_create_date TEXT  DEFAULT  (datetime('now','localtime')),"
+            + "m_delete_flag TEXT  DEFAULT 'N'"
+            + ");";
+
+
+
 
 
 
@@ -104,7 +117,7 @@ public class DbHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL(tableDataHistoryCarInCreateSQL);
         sqLiteDatabase.execSQL(tableDataHistoryCarOutCreateSQL);
         sqLiteDatabase.execSQL(tableDataHistoryEstampCreateSQL);
-
+        sqLiteDatabase.execSQL(tableDataHistoryCutShiftCreateSQL);
 
 
     }

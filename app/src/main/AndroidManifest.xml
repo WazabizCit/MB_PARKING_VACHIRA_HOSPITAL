@@ -29,6 +29,9 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".activity.HistoryCutShiftMainActivity"
+            android:exported="false" />
+        <activity
             android:name=".activity.HistoryEstampMainActivity"
             android:exported="false" />
         <activity
